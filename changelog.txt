@@ -1,0 +1,38 @@
+*** WordPress Settings Framework Changelog ***
+
+version 1.6.11
+* [fix] PHP8 warning for usort callback
+
+2018.10.25 - version 1.6.6
+ * [Fixed] Ensure setting page capability is used for content block
+ 
+ 2018.08.08 - version 1.6.6
+ * [Update] Add ul element to checkbox lists
+ * [Update] Update responsive styles
+ 
+2016.04.14 - version 1.6.2
+ * [Fixed] Undefined default error
+ * [New] Repeatable groups
+
+2014.07.08 - version 1.5.0
+ * [New] Added "password" field
+ * [New] Added "placeholder" attribute to text/password/textarea fields
+ * [New] Added "wpsf_register_settings" filter
+ * [Changed] No longer use the $wpsf_settings global
+ * [Changed] wpsf_ functions now require an option group id
+
+2012.10.09 - version 1.4.0
+ * [New] Added wpsf_delete_settings()
+
+2012.10.04 - version 1.3.0
+ * [New] Added "custom" field
+ * [Fixed] Color picker z-index issue
+
+2012.10.01 - version 1.2.0
+ * [New] Added an "editor" field
+
+2012.08.27 - version 1.1.0
+ * [New] Added "color" and "file" fields
+
+2012.08.27 - version 1.0.0
+ * Initial release
