@@ -1,12 +1,20 @@
 {
-    "name": "iconicwp/wordpress-settings-framework",
+    "name": "solution/wordpress-settings-framework",
     "authors": [
         {
-            "name": "James Kemp",
-            "email": "me@jckemp.com"
+            "name": "Sharaz Shahid",
+            "email": "sharazg5@gmail.com"
         }
     ],
     "require": {
         "woocommerce/woocommerce-sniffs": "^0.1.0"
+    },
+    "autoload": {
+        "psr-4": {"SolutionBoxSettings\\": "src/"}
+      },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }

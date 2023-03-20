@@ -9,6 +9,17 @@
  * @package wpsf
  */
 
+ defined( 'ABSPATH' ) || exit;
+
+require_once __DIR__ . '/src/SettingsAPI.php';
+
+// autoloader.
+if ( ! class_exists( \SolutionBoxSettings\SettingsAPI::class ) ) {
+	require __DIR__ . '/vendor/autoload.php';
+}
+
+
+
 /**
  * WPSFTest Class.
  */
@@ -33,14 +44,13 @@ class WPSFTest {
 	public function __construct() {
 		$this->plugin_path = plugin_dir_path( __FILE__ );
 
-		// Include and create a new WordPressSettingsFramework.
-		require_once $this->plugin_path . 'wp-settings-framework.php';
-		$this->wpsf = new WordPressSettingsFramework( $this->plugin_path . 'settings/example-settings.php', 'my_example_settings' );
+		$this->wpsf = new SolutionBoxSettings\SettingsAPI( $this->plugin_path . 'src/settings/example-settings.php', 'my_example_settings' );
 
 		// Add admin menu.
 		add_action( 'admin_menu', array( $this, 'add_settings_page' ), 20 );
 
 		// Add an optional settings validation filter (recommended).
+		add_filter( $this->wpsf->get_option_group() . '_settings_validate', array( &$this, 'validate_settings' ) );
 		add_filter( $this->wpsf->get_option_group() . '_settings_validate', array( &$this, 'validate_settings' ) );
 	}
 
