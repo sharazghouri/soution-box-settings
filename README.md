@@ -200,6 +200,14 @@ Actions & Filters
 * `sbsa_before_tab_links_[option_group]` - Before tabs HTML is output
 * `sbsa_after_tab_links_[option_group]` - After tabs HTML is output
 
+API Details
+-----------
+**Example 1 Tabless settings**
+<img width="1190" alt="image" src="https://user-images.githubusercontent.com/17900945/227388614-e0bb62c4-f09a-49f9-875f-b37e2d0e9fce.png">
+
+**Example 2 Tabbed settings**
+<img width="1251" alt="image" src="https://user-images.githubusercontent.com/17900945/227388843-719a1f93-39f7-4459-afa1-13642c799a31.png">
+
 Credits
 -------
 
