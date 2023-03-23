@@ -5,7 +5,7 @@ The WordPress Settings Framework aims to take the pain out of creating settings 
 by effectively creating a wrapper around the WordPress settings API and making it super simple to create and maintain
 settings pages.
 
-This repo is actually a working plugin which demonstrates how to implement SBSA in your plugins. See `sbsa-test.php`
+This repo is actually a working plugin which demonstrates how to implement SBSA in your plugins. See `src/sbsa-test.php`
 for details.
 
 You can use this framework with composer if you are using auto loading in your plugin.
@@ -156,14 +156,14 @@ See `settings/example-settings.php` for an example of possible values.
 API Details
 -----------
 
-    new WordPressSettingsFramework( string $settings_file [, string $option_group = ''] )
+    new SolutionBoxSettings\SettingsAPI( string $settings_file [, string $option_group = ''] )
 
 Creates a new settings [option_group](http://codex.wordpress.org/Function_Reference/register_setting) based on a setttings file.
 
 * `$settings_file` - path to the settings file
 * `$option_group` - optional "option_group" override (by default this will be set to the basename of the settings file)
 
-<pre>sbsa_get_setting( $option_group, $section_id, $field_id )</pre>
+<pre> SolutionBoxSettings\SettingsAPI::get_setting( $option_group, $section_id, $field_id )</pre>
 
 Get a setting from an option group
 
@@ -171,7 +171,7 @@ Get a setting from an option group
 * `$section_id` - section id (change to `[{$tab_id}_{$section_id}]` when using tabs.
 * `$field_id` - field id.
 
-<pre>sbsa_delete_settings( $option_group )</pre>
+<pre>SolutionBoxSettings\SettingsAPI::delete_settings( $option_group )</pre>
 
 Delete all the saved settings from a option group
 
