@@ -61,7 +61,7 @@ function sbsa_tabless_settings( $sbsa_settings ) {
 				'title'      => 'Date Picker',
 				'desc'       => 'This is a description.',
 				'type'       => 'date',
-				'datepicker' => array(''), // Array of datepicker options (http://api.jqueryui.com/datepicker/).
+				'datepicker' => array(), // Array of datepicker options (http://api.jqueryui.com/datepicker/).
 			),
 			array(
 				'id'      => 'image_radio',

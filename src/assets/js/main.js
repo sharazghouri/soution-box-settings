@@ -201,11 +201,12 @@
 			$( document ).on( 'focus',  '.datepicker:not(.hasTimepicker)', function() {
 				var datepicker_args = $( this ).data( 'datepicker' );
 
-				if( datepicker_args ) {
-					$( this ).datepicker( datepicker_args );
-				} else {
-					$( this ).datepicker( );
+				// It throws an error if empty string is passed.
+				if ( '' === datepicker_args ) {
+					datepicker_args = {};
 				}
+				$( this ).datepicker( datepicker_args );
+		
 				
 			} );
 
