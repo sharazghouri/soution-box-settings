@@ -17,12 +17,12 @@ version 1.6.11
 2014.07.08 - version 1.5.0
  * [New] Added "password" field
  * [New] Added "placeholder" attribute to text/password/textarea fields
- * [New] Added "wpsf_register_settings" filter
- * [Changed] No longer use the $wpsf_settings global
- * [Changed] wpsf_ functions now require an option group id
+ * [New] Added "sbsa_register_settings" filter
+ * [Changed] No longer use the $sbsa_settings global
+ * [Changed] sbsa_ functions now require an option group id
 
 2012.10.09 - version 1.4.0
- * [New] Added wpsf_delete_settings()
+ * [New] Added sbsa_delete_settings()
 
 2012.10.04 - version 1.3.0
  * [New] Added "custom" field

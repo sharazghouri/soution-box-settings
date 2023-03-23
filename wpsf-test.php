@@ -6,7 +6,7 @@
  * Author: Gilbert Pellegrom
  * Author URI: http://dev7studios.com
  *
- * @package wpsf
+ * @package sbsa
  */
 
  defined( 'ABSPATH' ) || exit;
@@ -21,9 +21,9 @@ if ( ! class_exists( \SolutionBoxSettings\SettingsAPI::class ) ) {
 
 
 /**
- * WPSFTest Class.
+ * SBSATest Class.
  */
-class WPSFTest {
+class SBSATest {
 	/**
 	 * Plugin path.
 	 *
@@ -36,29 +36,29 @@ class WPSFTest {
 	 *
 	 * @var WordPressSettingsFramework
 	 */
-	private $wpsf;
+	private $sbsa;
 
 	/**
-	 * WPSFTest constructor.
+	 * sbsaTest constructor.
 	 */
 	public function __construct() {
 		$this->plugin_path = plugin_dir_path( __FILE__ );
 
-		$this->wpsf = new SolutionBoxSettings\SettingsAPI( $this->plugin_path . 'src/settings/example-settings.php', 'my_example_settings' );
+		$this->sbsa = new SolutionBoxSettings\SettingsAPI( $this->plugin_path . 'src/settings/example-settings.php', 'my_example_settings' );
 
 		// Add admin menu.
 		add_action( 'admin_menu', array( $this, 'add_settings_page' ), 20 );
 
 		// Add an optional settings validation filter (recommended).
-		add_filter( $this->wpsf->get_option_group() . '_settings_validate', array( &$this, 'validate_settings' ) );
-		add_filter( $this->wpsf->get_option_group() . '_settings_validate', array( &$this, 'validate_settings' ) );
+		add_filter( $this->sbsa->get_option_group() . '_settings_validate', array( &$this, 'validate_settings' ) );
+		add_filter( $this->sbsa->get_option_group() . '_settings_validate', array( &$this, 'validate_settings' ) );
 	}
 
 	/**
 	 * Add settings page.
 	 */
 	public function add_settings_page() {
-		$this->wpsf->add_settings_page(
+		$this->sbsa->add_settings_page(
 			array(
 				'parent_slug' => 'woocommerce',
 				'page_title'  => esc_html__( 'Page Title', 'text-domain' ),
@@ -82,4 +82,4 @@ class WPSFTest {
 	}
 }
 
-$wpsf_test = new WPSFTest();
+$sbsa_test = new SBSATest();

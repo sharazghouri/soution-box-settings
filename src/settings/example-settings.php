@@ -3,32 +3,32 @@
  * WordPress Settings Framework
  *
  * @link https://github.com/gilbitron/WordPress-Settings-Framework
- * @package wpsf
+ * @package sbsa
  */
 
 /**
  * Define your settings
  *
- * The first parameter of this filter should be wpsf_register_settings_[options_group],
+ * The first parameter of this filter should be sbsa_register_settings_[options_group],
  * in this case "my_example_settings".
  *
  * Your "options_group" is the second param you use when running new WordPressSettingsFramework()
  * from your init function. It's important as it differentiates your options from others.
  *
- * To use the tabbed example, simply change the second param in the filter below to 'wpsf_tabbed_settings'
+ * To use the tabbed example, simply change the second param in the filter below to 'sbsa_tabbed_settings'
  * and check out the tabbed settings function on line 156.
  */
 
-add_filter( 'wpsf_register_settings_my_example_settings', 'wpsf_tabbed_settings' );
+add_filter( 'sbsa_register_settings_my_example_settings', 'sbsa_tabless_settings' );
 
 /**
  * Tabless example.
  *
- * @param array $wpsf_settings Settings.
+ * @param array $sbsa_settings Settings.
  */
-function wpsf_tabless_settings( $wpsf_settings ) {
+function sbsa_tabless_settings( $sbsa_settings ) {
 	// General Settings section.
-	$wpsf_settings[] = array(
+	$sbsa_settings[] = array(
 		'section_id'          => 'general',
 		'section_title'       => 'General Settings',
 		'section_description' => 'Some intro description about this section.',
@@ -61,7 +61,7 @@ function wpsf_tabless_settings( $wpsf_settings ) {
 				'title'      => 'Date Picker',
 				'desc'       => 'This is a description.',
 				'type'       => 'date',
-				'datepicker' => array(), // Array of datepicker options (http://api.jqueryui.com/datepicker/).
+				'datepicker' => array(''), // Array of datepicker options (http://api.jqueryui.com/datepicker/).
 			),
 			array(
 				'id'      => 'image_radio',
@@ -228,7 +228,7 @@ function wpsf_tabless_settings( $wpsf_settings ) {
 	);
 
 	// More Settings section.
-	$wpsf_settings[] = array(
+	$sbsa_settings[] = array(
 		'section_id'    => 'more',
 		'section_title' => 'More Settings',
 		'section_order' => 10,
@@ -346,7 +346,7 @@ function wpsf_tabless_settings( $wpsf_settings ) {
 		),
 	);
 
-	$wpsf_settings[] = array(
+	$sbsa_settings[] = array(
 		'section_id'            => 'additional',
 		'section_title'         => 'Additional Settings',
 		'section_order'         => 10,
@@ -375,17 +375,17 @@ function wpsf_tabless_settings( $wpsf_settings ) {
 		),
 	);
 
-	return $wpsf_settings;
+	return $sbsa_settings;
 }
 
 /**
  * Tabbed example.
  *
- * @param array $wpsf_settings settings.
+ * @param array $sbsa_settings settings.
  */
-function wpsf_tabbed_settings( $wpsf_settings ) {
+function sbsa_tabbed_settings( $sbsa_settings ) {
 	// Tabs.
-	$wpsf_settings['tabs'] = array(
+	$sbsa_settings['tabs'] = array(
 		array(
 			'id'    => 'tab_1',
 			'title' => esc_html__( 'Tab 1', 'text-domain' ),
@@ -408,7 +408,7 @@ function wpsf_tabbed_settings( $wpsf_settings ) {
 	);
 
 	// Settings.
-	$wpsf_settings['sections'] = array(
+	$sbsa_settings['sections'] = array(
 		array(
 			'tab_id'        => 'tab_1',
 			'section_id'    => 'section_1',
@@ -560,5 +560,5 @@ function wpsf_tabbed_settings( $wpsf_settings ) {
 		),
 	);
 
-	return $wpsf_settings;
+	return $sbsa_settings;
 }

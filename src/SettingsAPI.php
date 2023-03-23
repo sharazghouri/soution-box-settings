@@ -4,14 +4,14 @@ namespace SolutionBoxSettings;
 /**
  * WordPress Settings Framework
  *
- * @link    https://github.com/gilbitron/WordPress-Settings-Framework
- * @version 1.6.11
+ * @link    https://github.com/sharazghouri/soution-box-settings
+ * @version 1.0.0
  *
- * @package wordpress-settings-framework
+ * @package solution-box-settings
  */
 
 /**
- * WordPressSettingsFramework class
+ * Settings Api class
  */
 class SettingsAPI {
 	/**
@@ -114,7 +114,7 @@ class SettingsAPI {
 			global $pagenow;
 
 			add_action( 'admin_init', array( $this, 'admin_init' ) );
-			add_action( 'wpsf_do_settings_sections_' . $this->option_group, array( $this, 'do_tabless_settings_sections' ), 10 );
+			add_action( 'sbsa_do_settings_sections_' . $this->option_group, array( $this, 'do_tabless_settings_sections' ), 10 );
 
 			if ( filter_input( INPUT_GET, 'page' ) && filter_input( INPUT_GET, 'page' ) === $this->settings_page['slug'] ) {
 				if ( 'options-general.php' !== $pagenow ) {
@@ -124,14 +124,14 @@ class SettingsAPI {
 			}
 
 			if ( $this->has_tabs() ) {
-				add_action( 'wpsf_before_settings_' . $this->option_group, array( $this, 'tab_links' ) );
+				add_action( 'sbsa_before_settings_' . $this->option_group, array( $this, 'tab_links' ) );
 
-				remove_action( 'wpsf_do_settings_sections_' . $this->option_group, array( $this, 'do_tabless_settings_sections' ), 10 );
-				add_action( 'wpsf_do_settings_sections_' . $this->option_group, array( $this, 'do_tabbed_settings_sections' ), 10 );
+				remove_action( 'sbsa_do_settings_sections_' . $this->option_group, array( $this, 'do_tabless_settings_sections' ), 10 );
+				add_action( 'sbsa_do_settings_sections_' . $this->option_group, array( $this, 'do_tabbed_settings_sections' ), 10 );
 			}
 
-			add_action( 'wp_ajax_wpsf_export_settings', array( $this, 'export_settings' ) );
-			add_action( 'wp_ajax_wpsf_import_settings', array( $this, 'import_settings' ) );
+			add_action( 'wp_ajax_sbsa_export_settings', array( $this, 'export_settings' ) );
+			add_action( 'wp_ajax_sbsa_import_settings', array( $this, 'import_settings' ) );
 		}
 	}
 
@@ -142,14 +142,14 @@ class SettingsAPI {
 		/**
 		 * Filter: modify settings for a given option group.
 		 *
-		 * @filter wpsf_register_settings_<option_group>
+		 * @filter sbsa_register_settings_<option_group>
 		 * @since 1.6.9
 		 * @param array
 		 */
-		$this->settings_wrapper = apply_filters( 'wpsf_register_settings_' . $this->option_group, array() );
+		$this->settings_wrapper = apply_filters( 'sbsa_register_settings_' . $this->option_group, array() );
 
 		if ( ! is_array( $this->settings_wrapper ) ) {
-			return new WP_Error( 'broke', esc_html__( 'WPSF settings must be an array', 'wpsf' ) );
+			return new WP_Error( 'broke', esc_html__( 'sbsa settings must be an array', 'sbsa' ) );
 		}
 
 		// If "sections" is set, this settings group probably has tabs.
@@ -219,19 +219,19 @@ class SettingsAPI {
 				/**
 				 * Filter: modify icon URL for a given option group.
 				 *
-				 * @filter wpsf_menu_icon_url_<option_group>
+				 * @filter sbsa_menu_icon_url_<option_group>
 				 * @since 1.6.9
 				 * @param string
 				 */
-				apply_filters( 'wpsf_menu_icon_url_' . $this->option_group, '' ),
+				apply_filters( 'sbsa_menu_icon_url_' . $this->option_group, '' ),
 				/**
 				 * Filter: modify menu position for a given option group.
 				 *
-				 * @filter wpsf_menu_position_<option_group>
+				 * @filter sbsa_menu_position_<option_group>
 				 * @since 1.6.9
 				 * @param int|null
 				 */
-				apply_filters( 'wpsf_menu_position_' . $this->option_group, null )
+				apply_filters( 'sbsa_menu_position_' . $this->option_group, null )
 			);
 		}
 	}
@@ -241,12 +241,12 @@ class SettingsAPI {
 	 */
 	public function settings_page_content() {
 		if ( ! current_user_can( $this->settings_page['capability'] ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'wpsf' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'sbsa' ) );
 		}
 		?>
-		<div class="wpsf-settings wpsf-settings--<?php echo esc_attr( $this->option_group ); ?>">
+		<div class="sbsa-settings sbsa-settings--<?php echo esc_attr( $this->option_group ); ?>">
 			<?php $this->settings_header(); ?>
-			<div class="wpsf-settings__content">
+			<div class="sbsa-settings__content">
 				<?php $this->settings(); ?>
 			</div>
 		</div>
@@ -258,7 +258,7 @@ class SettingsAPI {
 	 */
 	public function settings_header() {
 		?>
-		<div class="wpsf-settings__header">
+		<div class="sbsa-settings__header">
 			<h2>
 				<?php
 				global $allowedposttags;
@@ -269,11 +269,11 @@ class SettingsAPI {
 					/**
 					 * Filter: modify title for a given option group.
 					 *
-					 * @filter wpsf_title_<option_group>
+					 * @filter sbsa_title_<option_group>
 					 * @since 1.6.9
 					 * @param string $title Title for the group settings header.
 					 */
-					apply_filters( 'wpsf_title_' . $this->option_group, $this->settings_page['title'] ),
+					apply_filters( 'sbsa_title_' . $this->option_group, $this->settings_page['title'] ),
 					$allowedposttags,
 					$protocols
 				);
@@ -283,10 +283,10 @@ class SettingsAPI {
 			/**
 			 * Hook: execute a callback after the option group title.
 			 *
-			 * @hook wpsf_after_title_<option_group>
+			 * @hook sbsa_after_title_<option_group>
 			 * @since 1.6.9
 			 */
-			do_action( 'wpsf_after_title_' . $this->option_group );
+			do_action( 'sbsa_after_title_' . $this->option_group );
 			?>
 		</div>
 		<?php
@@ -313,12 +313,12 @@ class SettingsAPI {
 			true
 		);
 
-		$wpsf_js_path = 'assets/js/main.js';
+		$sbsa_js_path = 'assets/js/main.js';
 		wp_register_script(
-			'wpsf',
-			$this->options_url . $wpsf_js_path,
+			'sbsa',
+			$this->options_url . $sbsa_js_path,
 			array( 'jquery' ),
-			filemtime( $this->options_path . $wpsf_js_path ),
+			filemtime( $this->options_path . $sbsa_js_path ),
 			true
 		);
 
@@ -329,14 +329,14 @@ class SettingsAPI {
 		wp_enqueue_script( 'jquery-ui-core' );
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 		wp_enqueue_script( 'jquery-ui-timepicker' );
-		wp_enqueue_script( 'wpsf' );
+		wp_enqueue_script( 'sbsa' );
 
 		$data = array(
-			'select_file'          => esc_html__( 'Please select a file to import', 'wpsf' ),
-			'invalid_file'         => esc_html__( 'Invalid file', 'wpsf' ),
-			'something_went_wrong' => esc_html__( 'Something went wrong', 'wpsf' ),
+			'select_file'          => esc_html__( 'Please select a file to import', 'sbsa' ),
+			'invalid_file'         => esc_html__( 'Invalid file', 'sbsa' ),
+			'something_went_wrong' => esc_html__( 'Something went wrong', 'sbsa' ),
 		);
-		wp_localize_script( 'wpsf', 'wpsf_vars', $data );
+		wp_localize_script( 'sbsa', 'sbsa_vars', $data );
 
 		// Styles.
 		$jqtimepicker_css_path = 'assets/vendor/jquery-timepicker/jquery.ui.timepicker.css';
@@ -347,13 +347,19 @@ class SettingsAPI {
 			filemtime( $this->options_path . $jqtimepicker_css_path )
 		);
 
-		$wpsf_css_path = 'assets/css/main.css';
+		$sbsa_css_path = 'assets/css/main.css';
 		wp_register_style(
-			'wpsf',
-			$this->options_url . $wpsf_css_path,
+			'sbsa',
+			$this->options_url . $sbsa_css_path,
 			array(),
-			filemtime( $this->options_path . $wpsf_css_path )
+			filemtime( $this->options_path . $sbsa_css_path )
 		);
+		// wp_enqueue_style(
+		// 	'sbsa-1',
+		// 	'https://getuikit.com/css/theme.css?lfds8h76',
+		// 	array(),
+		// 	filemtime( $this->options_path . $sbsa_css_path )
+		// );
 
 		$jqui_css_path = 'assets/vendor/jquery-ui/jquery-ui.css';
 		wp_register_style(
@@ -367,7 +373,7 @@ class SettingsAPI {
 		wp_enqueue_style( 'thickbox' );
 		wp_enqueue_style( 'jquery-ui-timepicker' );
 		wp_enqueue_style( 'jquery-ui-css' );
-		wp_enqueue_style( 'wpsf' );
+		wp_enqueue_style( 'sbsa' );
 	}
 
 	/**
@@ -405,7 +411,7 @@ class SettingsAPI {
 						echo '<span class="' . esc_attr( $render_class ) . '"></span>';
 					}
 					if ( isset( $section['section_description'] ) && $section['section_description'] ) {
-						echo '<div class="wpsf-section-description wpsf-section-description--' . esc_attr( $section['section_id'] ) . '">' . wp_kses_post( $section['section_description'] ) . '</div>';
+						echo '<div class="sbsa-section-description sbsa-section-description--' . esc_attr( $section['section_id'] ) . '">' . wp_kses_post( $section['section_description'] ) . '</div>';
 					}
 					break;
 				}
@@ -433,16 +439,16 @@ class SettingsAPI {
 
 								if ( isset( $field['link'] ) && is_array( $field['link'] ) ) {
 									$link_url      = ( isset( $field['link']['url'] ) ) ? esc_html( $field['link']['url'] ) : '';
-									$link_text     = ( isset( $field['link']['text'] ) ) ? esc_html( $field['link']['text'] ) : esc_html__( 'Learn More', 'wpsf' );
+									$link_text     = ( isset( $field['link']['text'] ) ) ? esc_html( $field['link']['text'] ) : esc_html__( 'Learn More', 'sbsa' );
 									$link_external = ( isset( $field['link']['external'] ) ) ? (bool) $field['link']['external'] : true;
 									$link_type     = ( isset( $field['link']['type'] ) ) ? esc_attr( $field['link']['type'] ) : 'tooltip';
 									$link_target   = ( $link_external ) ? ' target="_blank"' : '';
 
 									if ( 'tooltip' === $link_type ) {
-										$link_text = sprintf( '<i class="dashicons dashicons-info wpsf-link-icon" title="%s"><span class="screen-reader-text">%s</span></i>', $link_text, $link_text );
+										$link_text = sprintf( '<i class="dashicons dashicons-info sbsa-link-icon" title="%s"><span class="screen-reader-text">%s</span></i>', $link_text, $link_text );
 									}
 
-									$link = ( $link_url ) ? sprintf( '<a class="wpsf-label__link" href="%s"%s>%s</a>', $link_url, $link_target, $link_text ) : '';
+									$link = ( $link_url ) ? sprintf( '<a class="sbsa-label__link" href="%s"%s>%s</a>', $link_url, $link_target, $link_text ) : '';
 
 									if ( $link && 'tooltip' === $link_type ) {
 										$tooltip = $link;
@@ -451,10 +457,10 @@ class SettingsAPI {
 									}
 								}
 
-								$title = sprintf( '<span class="wpsf-label">%s %s</span>', $field['title'], $tooltip );
+								$title = sprintf( '<span class="sbsa-label">%s %s</span>', $field['title'], $tooltip );
 
 								if ( ! empty( $field['subtitle'] ) ) {
-									$title .= sprintf( '<span class="wpsf-subtitle">%s</span>', $field['subtitle'] );
+									$title .= sprintf( '<span class="sbsa-subtitle">%s</span>', $field['subtitle'] );
 								}
 
 								add_settings_field(
@@ -502,11 +508,11 @@ class SettingsAPI {
 		/**
 		 * Filter: filter the default setting values for a given option group.
 		 *
-		 * @filter wpsf_defaults_<option_group>
+		 * @filter sbsa_defaults_<option_group>
 		 * @since 1.6.9
 		 * @param mixed $setting_defaults Default values for settings.
 		 */
-		$this->setting_defaults = apply_filters( 'wpsf_defaults_' . $this->option_group, $this->setting_defaults );
+		$this->setting_defaults = apply_filters( 'sbsa_defaults_' . $this->option_group, $this->setting_defaults );
 
 		$args = wp_parse_args( $args['field'], $this->setting_defaults );
 
@@ -522,36 +528,36 @@ class SettingsAPI {
 		/**
 		 * Hook: execute callback before a given group.
 		 *
-		 * @hook wpsf_before_field_<option_group>
+		 * @hook sbsa_before_field_<option_group>
 		 * @since 1.6.9
 		 */
-		do_action( 'wpsf_before_field_' . $this->option_group );
+		do_action( 'sbsa_before_field_' . $this->option_group );
 
 		/**
 		 * Hook: execute callback before a specific field in a given group.
 		 *
-		 * @hook wpsf_before_field_<option_group>_<field_id>
+		 * @hook sbsa_before_field_<option_group>_<field_id>
 		 * @since 1.6.9
 		 */
-		do_action( 'wpsf_before_field_' . $this->option_group . '_' . $args['id'] );
+		do_action( 'sbsa_before_field_' . $this->option_group . '_' . $args['id'] );
 
 		$this->do_field_method( $args );
 
 		/**
 		 * Hook: execute callback after a given group.
 		 *
-		 * @hook wpsf_after_field_<option_group>
+		 * @hook sbsa_after_field_<option_group>
 		 * @since 1.6.9
 		 */
-		do_action( 'wpsf_after_field_' . $this->option_group );
+		do_action( 'sbsa_after_field_' . $this->option_group );
 
 		/**
 		 * Hook: execute callback after a specific field in a given group.
 		 *
-		 * @hook wpsf_after_field_<option_group>_<field_id>
+		 * @hook sbsa_after_field_<option_group>_<field_id>
 		 * @since 1.6.9
 		 */
-		do_action( 'wpsf_after_field_' . $this->option_group . '_' . $args['id'] );
+		do_action( 'sbsa_after_field_' . $this->option_group . '_' . $args['id'] );
 	}
 
 	/**
@@ -641,9 +647,9 @@ class SettingsAPI {
 	 */
 	public function generate_export_field( $args ) {
 		$args['value'] = esc_attr( stripslashes( $args['value'] ) );
-		$args['value'] = empty( $args['value'] ) ? esc_html__( 'Export Settings', 'wpsf' ) : $args['value'];
+		$args['value'] = empty( $args['value'] ) ? esc_html__( 'Export Settings', 'sbsa' ) : $args['value'];
 		$option_group  = $this->option_group;
-		$export_url    = site_url() . '/wp-admin/admin-ajax.php?action=wpsf_export_settings&_wpnonce=' . wp_create_nonce( 'wpsf_export_settings' ) . '&option_group=' . $option_group;
+		$export_url    = site_url() . '/wp-admin/admin-ajax.php?action=sbsa_export_settings&_wpnonce=' . wp_create_nonce( 'sbsa_export_settings' ) . '&option_group=' . $option_group;
 
 		echo '<a target=_blank href="' . esc_url( $export_url ) . '" class="button" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['id'] ) . '">' . esc_html( $args['value'] ) . '</a>';
 
@@ -658,24 +664,24 @@ class SettingsAPI {
 	 */
 	public function generate_import_field( $args ) {
 		$args['value'] = esc_attr( stripslashes( $args['value'] ) );
-		$args['value'] = empty( $args['value'] ) ? esc_html__( 'Import Settings', 'wpsf' ) : $args['value'];
+		$args['value'] = empty( $args['value'] ) ? esc_html__( 'Import Settings', 'sbsa' ) : $args['value'];
 		$option_group  = $this->option_group;
 
 		echo sprintf(
 			'
-			<div class="wpsf-import">
-				<div class="wpsf-import__false_btn">
-					<input type="file" name="wpsf-import-field" class="wpsf-import__file_field" id="%s" accept=".json"/>
-					<button type="button" name="wpsf_import_button" class="button wpsf-import__button" id="%s">%s</button>
-					<input type="hidden" class="wpsf_import_nonce" value="%s"></input>
-					<input type="hidden" class="wpsf_import_option_group" value="%s"></input>
+			<div class="sbsa-import">
+				<div class="sbsa-import__false_btn">
+					<input type="file" name="sbsa-import-field" class="sbsa-import__file_field" id="%s" accept=".json"/>
+					<button type="button" name="sbsa_import_button" class="button sbsa-import__button" id="%s">%s</button>
+					<input type="hidden" class="sbsa_import_nonce" value="%s"></input>
+					<input type="hidden" class="sbsa_import_option_group" value="%s"></input>
 				</div>
 				<span class="spinner"></span>
 			</div>',
 			esc_attr( $args['id'] ),
 			esc_attr( $args['id'] ),
 			esc_attr( $args['value'] ),
-			esc_attr( wp_create_nonce( 'wpsf_import_settings' ) ),
+			esc_attr( wp_create_nonce( 'sbsa_import_settings' ) ),
 			esc_attr( $this->option_group )
 		);
 
@@ -693,7 +699,7 @@ class SettingsAPI {
 		$value     = (array) $args['value'];
 		$row_count = ( ! empty( $value ) ) ? count( $value ) : 1;
 
-		echo '<table class="widefat wpsf-group" cellspacing="0">';
+		echo '<table class="widefat sbsa-group" cellspacing="0">';
 
 		echo '<tbody>';
 
@@ -730,22 +736,22 @@ class SettingsAPI {
 
 		echo '<input type="hidden" name="' . esc_attr( $args['name'] ) . '" value="0" />';
 
-		echo '<ul class="wpsf-visual-field wpsf-visual-field--image-checkboxes wpsf-visual-field--grid wpsf-visual-field--cols">';
+		echo '<ul class="sbsa-visual-field sbsa-visual-field--image-checkboxes sbsa-visual-field--grid sbsa-visual-field--cols">';
 
 		foreach ( $args['choices'] as $value => $choice ) {
 			$field_id      = sprintf( '%s_%s', $args['id'], $value );
 			$is_checked    = is_array( $args['value'] ) && in_array( $value, $args['value'], true );
-			$checked_class = $is_checked ? 'wpsf-visual-field__item--checked' : '';
+			$checked_class = $is_checked ? 'sbsa-visual-field__item--checked' : '';
 
 			echo sprintf(
-				'<li class="wpsf-visual-field__item %s">
+				'<li class="sbsa-visual-field__item %s">
 					<label>
-						<div class="wpsf-visual-field-image-radio__img_wrap">
+						<div class="sbsa-visual-field-image-radio__img_wrap">
 							<img src="%s">
 						</div>
-						<div class="wpsf-visual-field__item-footer">
+						<div class="sbsa-visual-field__item-footer">
 							<input type="checkbox" name="%s[]" id="%s" value="%s" class="%s" %s>
-							<span class="wpsf-visual-field__item-text">%s</span>
+							<span class="sbsa-visual-field__item-text">%s</span>
 						</div>
 					</label>
 				</li>',
@@ -774,25 +780,25 @@ class SettingsAPI {
 		$args['value'] = esc_html( esc_attr( $args['value'] ) );
 		$count         = count( $args['choices'] );
 
-		echo sprintf( '<ul class="wpsf-visual-field wpsf-visual-field--image-radio wpsf-visual-field--grid wpsf-visual-field--cols wpsf-visual-field--col-%s ">', esc_attr( $count ) );
+		echo sprintf( '<ul class="sbsa-visual-field sbsa-visual-field--image-radio sbsa-visual-field--grid sbsa-visual-field--cols sbsa-visual-field--col-%s ">', esc_attr( $count ) );
 
 		foreach ( $args['choices'] as $value => $choice ) {
 			$field_id = sprintf( '%s_%s', $args['id'], $value );
 			$checked  = $value === $args['value'] ? 'checked="checked"' : '';
 
 			echo sprintf(
-				'<li class="wpsf-visual-field__item %s">				
+				'<li class="sbsa-visual-field__item %s">				
 					<label>
-						<div class="wpsf-visual-field-image-radio__img_wrap">
+						<div class="sbsa-visual-field-image-radio__img_wrap">
 							<img src="%s">
 						</div>
-						<div class="wpsf-visual-field__item-footer">
+						<div class="sbsa-visual-field__item-footer">
 							<input type="radio" name="%s" id="%s" value="%s" class="%s" %s>
-							<span class="wpsf-visual-field__item-text">%s</span>
+							<span class="sbsa-visual-field__item-text">%s</span>
 						</div>
 					</label>
 				</li>',
-				( $checked ? 'wpsf-visual-field__item--checked' : '' ),
+				( $checked ? 'sbsa-visual-field__item--checked' : '' ),
 				esc_attr( $choice['image'] ),
 				esc_attr( $args['name'] ),
 				esc_attr( $field_id ),
@@ -824,13 +830,13 @@ class SettingsAPI {
 		if ( $args['subfields'] ) {
 			$row_class = ( 0 === $row % 2 ) ? 'alternate' : '';
 
-			$row_template .= sprintf( '<tr class="wpsf-group__row %s">', $row_class );
+			$row_template .= sprintf( '<tr class="sbsa-group__row %s">', $row_class );
 
-			$row_template .= sprintf( '<td class="wpsf-group__row-index"><span>%d</span></td>', $row );
+			$row_template .= sprintf( '<td class="sbsa-group__row-index"><span>%d</span></td>', $row );
 
-			$row_template .= '<td class="wpsf-group__row-fields">';
+			$row_template .= '<td class="sbsa-group__row-fields">';
 
-			$row_template .= '<input type="hidden" class="wpsf-group__row-id" name="' . sprintf( '%s[%d][row_id]', esc_attr( $args['name'] ), esc_attr( $row ) ) . '" value="' . esc_attr( $row_id_value ) . '" />';
+			$row_template .= '<input type="hidden" class="sbsa-group__row-id" name="' . sprintf( '%s[%d][row_id]', esc_attr( $args['name'] ), esc_attr( $row ) ) . '" value="' . esc_attr( $row_id_value ) . '" />';
 
 			foreach ( $args['subfields'] as $subfield ) {
 				$subfield = wp_parse_args( $subfield, $this->setting_defaults );
@@ -839,10 +845,10 @@ class SettingsAPI {
 				$subfield['name']  = sprintf( '%s[%d][%s]', $args['name'], $row, $subfield['id'] );
 				$subfield['id']    = sprintf( '%s_%d_%s', $args['id'], $row, $subfield['id'] );
 
-				$class = sprintf( 'wpsf-group__field-wrapper--%s', $subfield['type'] );
+				$class = sprintf( 'sbsa-group__field-wrapper--%s', $subfield['type'] );
 
-				$row_template .= sprintf( '<div class="wpsf-group__field-wrapper %s">', $class );
-				$row_template .= sprintf( '<label for="%s" class="wpsf-group__field-label">%s</label>', $subfield['id'], $subfield['title'] );
+				$row_template .= sprintf( '<div class="sbsa-group__field-wrapper %s">', $class );
+				$row_template .= sprintf( '<label for="%s" class="sbsa-group__field-label">%s</label>', $subfield['id'], $subfield['title'] );
 
 				ob_start();
 				$this->do_field_method( $subfield );
@@ -853,10 +859,10 @@ class SettingsAPI {
 
 			$row_template .= '</td>';
 
-			$row_template .= '<td class="wpsf-group__row-actions">';
+			$row_template .= '<td class="sbsa-group__row-actions">';
 
-			$row_template .= sprintf( '<a href="javascript: void(0);" class="wpsf-group__row-add" data-template="%s_template"><span class="dashicons dashicons-plus-alt"></span></a>', $args['id'] );
-			$row_template .= '<a href="javascript: void(0);" class="wpsf-group__row-remove"><span class="dashicons dashicons-trash"></span></a>';
+			$row_template .= sprintf( '<a href="javascript: void(0);" class="sbsa-group__row-add" data-template="%s_template"><span class="dashicons dashicons-plus-alt"></span></a>', $args['id'] );
+			$row_template .= '<a href="javascript: void(0);" class="sbsa-group__row-remove"><span class="dashicons dashicons-trash"></span></a>';
 
 			$row_template .= '</td>';
 
@@ -982,7 +988,7 @@ class SettingsAPI {
 	public function generate_checkboxes_field( $args ) {
 		echo '<input type="hidden" name="' . esc_attr( $args['name'] ) . '" value="0" />';
 
-		echo '<ul class="wpsf-list wpsf-list--checkboxes">';
+		echo '<ul class="sbsa-list sbsa-list--checkboxes">';
 
 		foreach ( $args['choices'] as $value => $text ) {
 			$checked  = ( is_array( $args['value'] ) && in_array( strval( $value ), array_map( 'strval', $args['value'] ), true ) ) ? 'checked="checked"' : '';
@@ -1042,7 +1048,7 @@ class SettingsAPI {
 
 		echo sprintf( '<input type="text" name="%s" id="%s" value="%s" class="regular-text %s"> ', esc_attr( $args['name'] ), esc_attr( $args['id'] ), esc_html( $args['value'] ), esc_attr( $args['class'] ) );
 
-		echo sprintf( '<input type="button" class="button wpsf-browse" id="%s" value="%s" />', esc_attr( $button_id ), esc_html__( 'Browse', 'wpsf' ) );
+		echo sprintf( '<input type="button" class="button sbsa-browse" id="%s" value="%s" />', esc_attr( $button_id ), esc_html__( 'Browse', 'sbsa' ) );
 		?>
 		<script type='text/javascript'>
 			jQuery( document ).ready( function( $ ) {
@@ -1070,9 +1076,9 @@ class SettingsAPI {
 
 					// Create the media frame.
 					file_frame = wp.media.frames.file_frame = wp.media({
-						title: '<?php echo esc_html__( 'Select a image to upload', 'wpsf' ); ?>',
+						title: '<?php echo esc_html__( 'Select a image to upload', 'sbsa' ); ?>',
 						button: {
-							text: '<?php echo esc_html__( 'Use this image', 'wpsf' ); ?>',
+							text: '<?php echo esc_html__( 'Use this image', 'sbsa' ); ?>',
 						},
 						multiple: false	// Set to true to allow multiple files to be selected
 					});
@@ -1179,7 +1185,7 @@ class SettingsAPI {
 		$field_titles = array_keys( $args['default'] );
 		$values       = array_values( $args['value'] );
 
-		echo '<div class="wpsf-multifields">';
+		echo '<div class="sbsa-multifields">';
 
 		$i = 0;
 		$c = count( $values );
@@ -1188,7 +1194,7 @@ class SettingsAPI {
 			$field_id = sprintf( '%s_%s', $args['id'], $i );
 			$value    = esc_attr( stripslashes( $values[ $i ] ) );
 
-			echo '<div class="wpsf-multifields__field">';
+			echo '<div class="sbsa-multifields__field">';
 			echo '<input type="text" name="' . esc_attr( $args['name'] ) . '[]" id="' . esc_attr( $field_id ) . '" value="' . esc_attr( $value ) . '" class="regular-text ' . esc_attr( $args['class'] ) . '" placeholder="' . esc_attr( $args['placeholder'] ) . '" />';
 			echo '<br><span>' . esc_html( $field_titles[ $i ] ) . '</span>';
 			echo '</div>';
@@ -1230,20 +1236,20 @@ class SettingsAPI {
 		/**
 		 * Hook: execute callback before the settings form for a given group.
 		 *
-		 * @hook wpsf_before_settings_<option_group>
+		 * @hook sbsa_before_settings_<option_group>
 		 * @since 1.6.9
 		 */
-		do_action( 'wpsf_before_settings_' . $this->option_group );
+		do_action( 'sbsa_before_settings_' . $this->option_group );
 		?>
 		<form action="options.php" method="post" novalidate enctype="multipart/form-data">
 			<?php
 			/**
 			 * Hook: execute callback before the settings fields for a given group.
 			 *
-			 * @hook wpsf_before_settings_fields_<option_group>
+			 * @hook sbsa_before_settings_fields_<option_group>
 			 * @since 1.6.9
 			 */
-			do_action( 'wpsf_before_settings_fields_' . $this->option_group );
+			do_action( 'sbsa_before_settings_fields_' . $this->option_group );
 			?>
 			<?php settings_fields( $this->option_group ); ?>
 
@@ -1251,21 +1257,21 @@ class SettingsAPI {
 			/**
 			 * Hook: execute callback to output the settings sections for a given group.
 			 *
-			 * @hook wpsf_do_settings_sections_<option_group>
+			 * @hook sbsa_do_settings_sections_<option_group>
 			 * @since 1.6.9
 			 */
-			do_action( 'wpsf_do_settings_sections_' . $this->option_group );
+			do_action( 'sbsa_do_settings_sections_' . $this->option_group );
 			?>
 
 			<?php
 			/**
 			 * Filter: control whether the save changes button should be visible or not for a given option group.
 			 *
-			 * @filter wpsf_show_save_changes_button_<option_group>
+			 * @filter sbsa_show_save_changes_button_<option_group>
 			 * @since 1.6.9
 			 * @param boolean
 			 */
-			if ( apply_filters( 'wpsf_show_save_changes_button_' . $this->option_group, true ) ) {
+			if ( apply_filters( 'sbsa_show_save_changes_button_' . $this->option_group, true ) ) {
 				?>
 				<p class="submit">
 					<input type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Changes' ); ?>" />
@@ -1276,10 +1282,10 @@ class SettingsAPI {
 		/**
 		 * Hook: execute callback after the settings form for a given group.
 		 *
-		 * @hook wpsf_after_settings_<option_group>
+		 * @hook sbsa_after_settings_<option_group>
 		 * @since 1.6.9
 		 */
-		do_action( 'wpsf_after_settings_' . $this->option_group );
+		do_action( 'sbsa_after_settings_' . $this->option_group );
 	}
 
 	/**
@@ -1332,7 +1338,7 @@ class SettingsAPI {
 	 */
 	public function do_tabless_settings_sections() {
 		?>
-		<div class="wpsf-section wpsf-tabless">
+		<div class="sbsa-section sbsa-tabless">
 			<?php do_settings_sections( $this->option_group ); ?>
 		</div>
 		<?php
@@ -1345,9 +1351,9 @@ class SettingsAPI {
 		$i = 0;
 		foreach ( $this->tabs as $tab_data ) {
 			?>
-			<div id="tab-<?php echo esc_attr( $tab_data['id'] ); ?>" class="wpsf-section wpsf-tab wpsf-tab--<?php echo esc_attr( $tab_data['id'] ); ?> <?php
+			<div id="tab-<?php echo esc_attr( $tab_data['id'] ); ?>" class="sbsa-section sbsa-tab sbsa-tab--<?php echo esc_attr( $tab_data['id'] ); ?> <?php
 			if ( 0 === $i ) {
-				echo 'wpsf-tab--active';
+				echo 'sbsa-tab--active';
 			}
 			?>
 			">
@@ -1367,23 +1373,23 @@ class SettingsAPI {
 		/**
 		 * Filter: control whether the tab links should be visible or not for a given option group.
 		 *
-		 * @filter wpsf_show_tab_links_<option_group>
+		 * @filter sbsa_show_tab_links_<option_group>
 		 * @since 1.6.9
 		 * @param boolean
 		 */
-		if ( ! apply_filters( 'wpsf_show_tab_links_' . $this->option_group, true ) ) {
+		if ( ! apply_filters( 'sbsa_show_tab_links_' . $this->option_group, true ) ) {
 			return;
 		}
 
 		/**
 		 * Hook: execute callback before the tab links for a given option group.
 		 *
-		 * @hook wpsf_before_tab_links_<option_group>
+		 * @hook sbsa_before_tab_links_<option_group>
 		 * @since 1.6.9
 		 */
-		do_action( 'wpsf_before_tab_links_' . $this->option_group );
+		do_action( 'sbsa_before_tab_links_' . $this->option_group );
 		?>
-		<ul class="wpsf-nav">
+		<ul class="sbsa-nav">
 			<?php
 			$i = 0;
 			foreach ( $this->tabs as $tab_data ) {
@@ -1397,30 +1403,30 @@ class SettingsAPI {
 
 				$tab_data['class'] .= self::add_show_hide_classes( $tab_data );
 
-				$active = ( 0 === $i ) ? 'wpsf-nav__item--active' : '';
+				$active = ( 0 === $i ) ? 'sbsa-nav__item--active' : '';
 				?>
-				<li class="wpsf-nav__item <?php echo esc_attr( $active ); ?>">
-					<a class="wpsf-nav__item-link <?php echo esc_attr( $tab_data['class'] ); ?>" href="#tab-<?php echo esc_attr( $tab_data['id'] ); ?>"><?php echo wp_kses_post( $tab_data['title'] ); ?></a>
+				<li class="sbsa-nav__item <?php echo esc_attr( $active ); ?>">
+					<a class="sbsa-nav__item-link <?php echo esc_attr( $tab_data['class'] ); ?>" href="#tab-<?php echo esc_attr( $tab_data['id'] ); ?>"><?php echo wp_kses_post( $tab_data['title'] ); ?></a>
 				</li>
 				<?php
 				$i ++;
 			}
 			?>
-			<li class="wpsf-nav__item wpsf-nav__item--last">
-				<input type="submit" class="button-primary wpsf-button-submit" value="<?php esc_attr_e( 'Save Changes' ); ?>">
+			<li class="sbsa-nav__item sbsa-nav__item--last">
+				<input type="submit" class="button-primary sbsa-button-submit" value="<?php esc_attr_e( 'Save Changes' ); ?>">
 			</li>
 		</ul>
 
 		<?php // Add this here so notices are moved. ?>
-		<div class="wrap wpsf-notices"><h2>&nbsp;</h2></div>
+		<div class="wrap sbsa-notices"><h2>&nbsp;</h2></div>
 		<?php
 		/**
 		 * Hook: execute callback after the tab links for a given option group.
 		 *
-		 * @hook wpsf_after_tab_links_<option_group>
+		 * @hook sbsa_after_tab_links_<option_group>
 		 * @since 1.6.9
 		 */
-		do_action( 'wpsf_after_tab_links_' . $this->option_group );
+		do_action( 'sbsa_after_tab_links_' . $this->option_group );
 	}
 
 	/**
@@ -1527,12 +1533,12 @@ class SettingsAPI {
 		$_wpnonce     = filter_input( INPUT_GET, '_wpnonce' );
 		$option_group = filter_input( INPUT_GET, 'option_group' );
 
-		if ( empty( $_wpnonce ) || ! wp_verify_nonce( $_wpnonce, 'wpsf_export_settings' ) ) {
-			wp_die( esc_html__( 'Action failed.', 'wpsf' ) );
+		if ( empty( $_wpnonce ) || ! wp_verify_nonce( $_wpnonce, 'sbsa_export_settings' ) ) {
+			wp_die( esc_html__( 'Action failed.', 'sbsa' ) );
 		}
 
 		if ( empty( $option_group ) ) {
-			wp_die( esc_html__( 'No option group specified.', 'wpsf' ) );
+			wp_die( esc_html__( 'No option group specified.', 'sbsa' ) );
 		}
 
 		$options = get_option( $option_group . '_settings' );
@@ -1540,7 +1546,7 @@ class SettingsAPI {
 
 		// output the file contents to the browser.
 		header( 'Content-Type: text/json; charset=utf-8' );
-		header( 'Content-Disposition: attachment; filename=wpsf-settings-' . $option_group . '.json' );
+		header( 'Content-Disposition: attachment; filename=sbsa-settings-' . $option_group . '.json' );
 		// @codingStandardsIgnoreStart
 		echo $options; // The string is already encoded, and option values will have already been escaped.
 		// @codingStandardsIgnoreEnd
@@ -1560,7 +1566,7 @@ class SettingsAPI {
 		}
 
 		// verify nonce.
-		if ( empty( $_wpnonce ) || ! wp_verify_nonce( $_wpnonce, 'wpsf_import_settings' ) ) {
+		if ( empty( $_wpnonce ) || ! wp_verify_nonce( $_wpnonce, 'sbsa_import_settings' ) ) {
 			wp_send_json_error();
 		}
 

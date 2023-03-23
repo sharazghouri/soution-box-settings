@@ -5,7 +5,7 @@ The WordPress Settings Framework aims to take the pain out of creating settings 
 by effectively creating a wrapper around the WordPress settings API and making it super simple to create and maintain
 settings pages.
 
-This repo is actually a working plugin which demonstrates how to implement WPSF in your plugins. See `wpsf-test.php`
+This repo is actually a working plugin which demonstrates how to implement SBSA in your plugins. See `sbsa-test.php`
 for details.
 
 Setting Up Your Plugin
@@ -18,7 +18,7 @@ Setting Up Your Plugin
 Now you can set up your plugin like:
 
 ```php
-class WPSFTest {
+class SBSATest {
 	/**
 	 * @var string
 	 */
@@ -27,30 +27,30 @@ class WPSFTest {
 	/**
 	 * @var WordPressSettingsFramework
 	 */
-	private $wpsf;
+	private $sbsa;
 
 	/**
-	 * WPSFTest constructor.
+	 * SBSATest constructor.
 	 */
 	function __construct() {
 		$this->plugin_path = plugin_dir_path( __FILE__ );
 
 		// Include and create a new WordPressSettingsFramework
 		require_once( $this->plugin_path . 'wp-settings-framework/wp-settings-framework.php' );
-		$this->wpsf = new WordPressSettingsFramework( $this->plugin_path . 'settings/settings-general.php', 'prefix_settings_general' );
+		$this->sbsa = new WordPressSettingsFramework( $this->plugin_path . 'settings/settings-general.php', 'prefix_settings_general' );
 
 		// Add admin menu
 		add_action( 'admin_menu', array( $this, 'add_settings_page' ), 20 );
 		
 		// Add an optional settings validation filter (recommended)
-		add_filter( $this->wpsf->get_option_group() . '_settings_validate', array( &$this, 'validate_settings' ) );
+		add_filter( $this->sbsa->get_option_group() . '_settings_validate', array( &$this, 'validate_settings' ) );
 	}
 
 	/**
 	 * Add settings page.
 	 */
 	function add_settings_page() {
-		$this->wpsf->add_settings_page( array(
+		$this->sbsa->add_settings_page( array(
 			'parent_slug' => 'woocommerce',
 			'page_title'  => __( 'Page Title', 'text-domain' ),
 			'menu_title'  => __( 'menu Title', 'text-domain' ),
@@ -79,7 +79,7 @@ Your settings values can be accessed like so:
 
 ```php
 // Get settings
-$this->wpsf->get_settings();
+$this->sbsa->get_settings();
 ```
 
 This will get either the saved setting values, or the default values that you set in your settings file.
@@ -88,17 +88,17 @@ Or by getting individual settings:
 
 ```php
 // Get individual setting
-$setting = wpsf_get_setting( 'prefix_settings_general', 'general', 'text' );
+$setting = sbsa_get_setting( 'prefix_settings_general', 'general', 'text' );
 ```
 
 
 The Settings Files
 ------------------
 
-The settings files work by filling the global `$wpsf_settings` array with data in the following format:
+The settings files work by filling the global `$sbsa_settings` array with data in the following format:
 
 ```php
-$wpsf_settings[] = array(
+$sbsa_settings[] = array(
     'section_id' => 'general', // The section ID (required)
     'section_title' => 'General Settings', // The section title (required)
     'section_description' => 'Some intro description about this section.', // The section description (optional)
@@ -155,7 +155,7 @@ Creates a new settings [option_group](http://codex.wordpress.org/Function_Refere
 * `$settings_file` - path to the settings file
 * `$option_group` - optional "option_group" override (by default this will be set to the basename of the settings file)
 
-<pre>wpsf_get_setting( $option_group, $section_id, $field_id )</pre>
+<pre>sbsa_get_setting( $option_group, $section_id, $field_id )</pre>
 
 Get a setting from an option group
 
@@ -163,7 +163,7 @@ Get a setting from an option group
 * `$section_id` - section id (change to `[{$tab_id}_{$section_id}]` when using tabs.
 * `$field_id` - field id.
 
-<pre>wpsf_delete_settings( $option_group )</pre>
+<pre>sbsa_delete_settings( $option_group )</pre>
 
 Delete all the saved settings from a option group
 
@@ -174,23 +174,23 @@ Actions & Filters
 
 **Filters**
 
-* `wpsf_register_settings_[option_group]` - The filter used to register your settings. See `settings/example-settings.php` for an example.
-* `[option_group]_settings_validate` - Basically the `$sanitize_callback` from [register_setting](http://codex.wordpress.org/Function_Reference/register_setting). Use `$wpsf->get_option_group()` to get the option group id.
-* `wpsf_defaults_[option_group]` - Default args for a settings field
+* `sbsa_register_settings_[option_group]` - The filter used to register your settings. See `settings/example-settings.php` for an example.
+* `[option_group]_settings_validate` - Basically the `$sanitize_callback` from [register_setting](http://codex.wordpress.org/Function_Reference/register_setting). Use `$sbsa->get_option_group()` to get the option group id.
+* `sbsa_defaults_[option_group]` - Default args for a settings field
 
 **Actions**
 
-* `wpsf_before_field_[option_group]` - Before a field HTML is output
-* `wpsf_before_field_[option_group]_[field_id]` - Before a field HTML is output
-* `wpsf_after_field_[option_group]` - After a field HTML is output
-* `wpsf_after_field_[option_group]_[field_id]` - After a field HTML is output
-* `wpsf_before_settings_[option_group]` - Before settings form HTML is output
-* `wpsf_after_settings_[option_group]` - After settings form HTML is output
-* `wpsf_before_settings_fields_[option_group]` - Before settings form fields HTML is output (inside the `<form>`)
-* `wpsf_do_settings_sections_[option_group]` - Settings form fields HTMLoutput (inside the `<form>`)
-* `wpsf_do_settings_sections_[option_group]` - Settings form fields HTMLoutput (inside the `<form>`)
-* `wpsf_before_tab_links_[option_group]` - Before tabs HTML is output
-* `wpsf_after_tab_links_[option_group]` - After tabs HTML is output
+* `sbsa_before_field_[option_group]` - Before a field HTML is output
+* `sbsa_before_field_[option_group]_[field_id]` - Before a field HTML is output
+* `sbsa_after_field_[option_group]` - After a field HTML is output
+* `sbsa_after_field_[option_group]_[field_id]` - After a field HTML is output
+* `sbsa_before_settings_[option_group]` - Before settings form HTML is output
+* `sbsa_after_settings_[option_group]` - After settings form HTML is output
+* `sbsa_before_settings_fields_[option_group]` - Before settings form fields HTML is output (inside the `<form>`)
+* `sbsa_do_settings_sections_[option_group]` - Settings form fields HTMLoutput (inside the `<form>`)
+* `sbsa_do_settings_sections_[option_group]` - Settings form fields HTMLoutput (inside the `<form>`)
+* `sbsa_before_tab_links_[option_group]` - Before tabs HTML is output
+* `sbsa_after_tab_links_[option_group]` - After tabs HTML is output
 
 Credits
 -------
