@@ -8,16 +8,26 @@ settings pages.
 This repo is actually a working plugin which demonstrates how to implement SBSA in your plugins. See `sbsa-test.php`
 for details.
 
+You can use this framework with composer if you are using auto loading in your plugin.
+
+## Installation
+
+```php
+composer require solutionbox/wordpress-settings-framework
+```
+
 Setting Up Your Plugin
 ----------------------
 
-1. Create a folder "wp-settings-framework" in the root of your plugin folder, containing `wp-settings-framework.php` and the "assets" folder.
+1. Install the package via composer.
 2. Create a "settings" folder in your plugin root.
 3. Create a settings file in your new "settings" folder (e.g. `settings-general.php`)
 
 Now you can set up your plugin like:
 
 ```php
+use  SolutionBoxSettings;
+
 class SBSATest {
 	/**
 	 * @var string
@@ -35,9 +45,7 @@ class SBSATest {
 	function __construct() {
 		$this->plugin_path = plugin_dir_path( __FILE__ );
 
-		// Include and create a new WordPressSettingsFramework
-		require_once( $this->plugin_path . 'wp-settings-framework/wp-settings-framework.php' );
-		$this->sbsa = new WordPressSettingsFramework( $this->plugin_path . 'settings/settings-general.php', 'prefix_settings_general' );
+		$this->sbsa = new SolutionBoxSettings\SettingsAPI( $this->plugin_path . 'src/settings/example-settings.php', 'my_example_settings' );
 
 		// Add admin menu
 		add_action( 'admin_menu', array( $this, 'add_settings_page' ), 20 );
@@ -47,7 +55,7 @@ class SBSATest {
 	}
 
 	/**
-	 * Add settings page.
+	 * Add WooCommerce sub settings page.
 	 */
 	function add_settings_page() {
 		$this->sbsa->add_settings_page( array(
@@ -88,7 +96,7 @@ Or by getting individual settings:
 
 ```php
 // Get individual setting
-$setting = sbsa_get_setting( 'prefix_settings_general', 'general', 'text' );
+$setting = SolutionBoxSettings\SettingsAPI::get_setting( 'prefix_settings_general', 'general', 'text' );
 ```
 
 
@@ -195,8 +203,8 @@ Actions & Filters
 Credits
 -------
 
-The WordPress Settings Framework was created by [Gilbert Pellegrom](http://gilbert.pellegrom.me) from [Dev7studios](http://dev7studios.com) and maintained by [James Kemp](https://jckemp.com) from [Iconic](https://iconicwp.com)
+The WordPress Settings Framework was Cloned from [iconicwp](https://github.com/iconicwp/WordPress-Settings-Framework) then converted into php package with more features.
 
-Please contribute by [reporting bugs](https://github.com/jamesckemp/WordPress-Settings-Framework/issues) and submitting [pull requests](https://github.com/jamesckemp/WordPress-Settings-Framework/pulls).
+Please contribute by [reporting bugs](https://github.com/sharazghouri/soution-box-settings/issues) and submitting [pull requests](https://github.com/sharazghouri/soution-box-settings/pulls).
 
 Want to say thanks? [Consider tipping me](https://www.paypal.me/jamesckemp).
