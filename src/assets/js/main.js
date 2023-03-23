@@ -201,7 +201,12 @@
 			$( document ).on( 'focus',  '.datepicker:not(.hasTimepicker)', function() {
 				var datepicker_args = $( this ).data( 'datepicker' );
 
-				$( this ).datepicker( datepicker_args );
+				if( datepicker_args ) {
+					$( this ).datepicker( datepicker_args );
+				} else {
+					$( this ).datepicker( );
+				}
+				
 			} );
 
 			// Empty altField if datepicker field is emptied.
