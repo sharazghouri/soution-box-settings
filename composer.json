@@ -1,5 +1,7 @@
 {
     "name": "solutionbox/wordpress-settings-framework",
+    "keywords": ["wordpess", "wordpress-settings", "wordpress-settings-api", "wordpress-plugin"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Sharaz Shahid",
