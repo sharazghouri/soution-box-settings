@@ -163,7 +163,7 @@ API Details
 
     new SolutionBoxSettings\SettingsAPI( string $settings_file [, string $option_group = ''] )
 
-Creates a new settings [option_group](http://codex.wordpress.org/Function_Reference/register_setting) based on a setttings file.
+Creates a new settings [option_group](http://codex.wordpress.org/Function_Reference/register_setting) based on a settings file.
 
 * `$settings_file` - path to the settings file
 * `$option_group` - optional "option_group" override (by default this will be set to the basename of the settings file)
@@ -193,19 +193,25 @@ Actions & Filters
 
 **Actions**
 
+* `sbsa_before_settings_page_[option_group]` - Before setting page HTML is output
+* `sbsa_after_settings_page_[option_group]` - After setting page HTML is output
+* `sbsa_before_settings_page_header_[option_group]` - Before setting page header HTML is output
+* `sbsa_after_settings_page_header_[option_group]` - After setting page header HTML is output
+* `sbsa_settings_sections_args_[option_group]` - Section extra args for to wrap the section with HTML and extra class [More](https://developer.wordpress.org/reference/functions/add_settings_section/#parameters)
 * `sbsa_before_field_[option_group]` - Before a field HTML is output
 * `sbsa_before_field_[option_group]_[field_id]` - Before a field HTML is output
 * `sbsa_after_field_[option_group]` - After a field HTML is output
 * `sbsa_after_field_[option_group]_[field_id]` - After a field HTML is output
 * `sbsa_before_settings_[option_group]` - Before settings form HTML is output
 * `sbsa_after_settings_[option_group]` - After settings form HTML is output
+* `sbsa_before_tabless_settings_[option_group]` - Before settings  section HTML is output
+* `sbsa_after_tabless_settings_[option_group]` - After settings section HTML is output
 * `sbsa_before_settings_fields_[option_group]` - Before settings form fields HTML is output (inside the `<form>`)
-* `sbsa_do_settings_sections_[option_group]` - Settings form fields HTMLoutput (inside the `<form>`)
 * `sbsa_do_settings_sections_[option_group]` - Settings form fields HTMLoutput (inside the `<form>`)
 * `sbsa_before_tab_links_[option_group]` - Before tabs HTML is output
 * `sbsa_after_tab_links_[option_group]` - After tabs HTML is output
 
-API Details
+Examples
 -----------
 **Example 1 Tabless settings**
 <img width="1190" alt="image" src="https://user-images.githubusercontent.com/17900945/227388614-e0bb62c4-f09a-49f9-875f-b37e2d0e9fce.png">
