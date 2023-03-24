@@ -243,14 +243,46 @@ class SettingsAPI {
 		if ( ! current_user_can( $this->settings_page['capability'] ) ) {
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'sbsa' ) );
 		}
+		/**
+		 * Hook: execute a callback before the settings page.
+		 *
+		 * @hook sbsa_before_settings_page_<option_group>
+		 * @since 0.2.0
+		 */
+		do_action( 'sbsa_before_settings_page_' . $this->option_group );
 		?>
 		<div class="sbsa-settings sbsa-settings--<?php echo esc_attr( $this->option_group ); ?>">
+			<?php
+			/**
+			 * Hook: execute a callback before the settings page header.
+			 *
+			 * @hook sbsa_before_settings_page_header_<option_group>
+			 * @since 0.2.0
+			 */
+			do_action( 'sbsa_before_settings_page_header_' . $this->option_group );
+			?>
 			<?php $this->settings_header(); ?>
+			<?php
+			/**
+			 * Hook: execute a callback after the settings page header.
+			 *
+			 * @hook sbsa_after_settings_page_header_<option_group>
+			 * @since 0.2.0
+			 */
+			do_action( 'sbsa_before_settings_page_header_' . $this->option_group );
+			?>
 			<div class="sbsa-settings__content">
 				<?php $this->settings(); ?>
 			</div>
 		</div>
 		<?php
+		/**
+		 * Hook: execute a callback after the settings page.
+		 *
+		 * @hook sbsa_after_settings_page_<option_group>
+		 * @since 0.2.0
+		 */
+		do_action( 'sbsa_after_settings_page_' . $this->option_group );
 	}
 
 	/**
@@ -355,10 +387,10 @@ class SettingsAPI {
 			filemtime( $this->options_path . $sbsa_css_path )
 		);
 		// wp_enqueue_style(
-		// 	'sbsa-1',
-		// 	'https://getuikit.com/css/theme.css?lfds8h76',
-		// 	array(),
-		// 	filemtime( $this->options_path . $sbsa_css_path )
+		// 'sbsa-1',
+		// 'https://getuikit.com/css/theme.css?lfds8h76',
+		// array(),
+		// filemtime( $this->options_path . $sbsa_css_path )
 		// );
 
 		$jqui_css_path = 'assets/vendor/jquery-ui/jquery-ui.css';
@@ -429,8 +461,8 @@ class SettingsAPI {
 			foreach ( $this->settings as $section ) {
 				if ( isset( $section['section_id'] ) && $section['section_id'] && isset( $section['section_title'] ) ) {
 					$page_name = ( $this->has_tabs() ) ? sprintf( '%s_%s', $this->option_group, $section['tab_id'] ) : $this->option_group;
-
-					add_settings_section( $section['section_id'], $section['section_title'], array( $this, 'section_intro' ), $page_name );
+					echo '<span>dss</span>';
+					add_settings_section( $section['section_id'], $section['section_title'], array( $this, 'section_intro' ), $page_name, apply_filters( 'sbsa_settings_sections_args_' . $this->option_group, array(), $section ) );
 
 					if ( isset( $section['fields'] ) && is_array( $section['fields'] ) && ! empty( $section['fields'] ) ) {
 						foreach ( $section['fields'] as $field ) {
@@ -1337,11 +1369,26 @@ class SettingsAPI {
 	 * Tabless Settings sections
 	 */
 	public function do_tabless_settings_sections() {
+		/**
+		 * Hook: execute a callback before the tables settings section.
+		 *
+		 * @hook sbsa_before_settings_<option_group>
+		 * @since 0.2.0
+		 */
+		do_action( 'sbsa_before_tabless_settings_' . $this->option_group );
+
 		?>
 		<div class="sbsa-section sbsa-tabless">
 			<?php do_settings_sections( $this->option_group ); ?>
 		</div>
 		<?php
+		/**
+		 * Hook: execute a callback after the tabless settings section.
+		 *
+		 * @hook sbsa_after_settings_<option_group>
+		 * @since 0.2.0
+		 */
+		do_action( 'sbsa_after_tabless_settings_' . $this->option_group );
 	}
 
 	/**
