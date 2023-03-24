@@ -1,6 +1,11 @@
 WordPress Settings Framework
 ============================
+<p align="center">
 
+<a href="https://packagist.org/packages/solutionbox/wordpress-settings-framework"><img src="https://img.shields.io/packagist/dt/solutionbox/wordpress-settings-framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/solutionbox/wordpress-settings-framework"><img src="https://img.shields.io/packagist/v/solutionbox/wordpress-settings-framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/solutionbox/wordpress-settings-framework"><img src="https://img.shields.io/packagist/l/solutionbox/wordpress-settings-framework" alt="License"></a>
+</p>
 The WordPress Settings Framework aims to take the pain out of creating settings pages for your WordPress plugins
 by effectively creating a wrapper around the WordPress settings API and making it super simple to create and maintain
 settings pages.
