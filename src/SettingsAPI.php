@@ -321,6 +321,21 @@ class SettingsAPI {
 			filemtime( $this->options_path . $sbsa_js_path ),
 			true
 		);
+		$sbsa_js_path = 'assets/js/main.js';
+		wp_register_script(
+			'ui-kit',
+			'https://cdn.jsdelivr.net/npm/uikit@3.16.10/dist/js/uikit.min.js',
+			array( ),
+			'1.2.1',
+			true
+		);
+		wp_register_script(
+			'ui-kit-icons',
+			'https://cdn.jsdelivr.net/npm/uikit@3.16.10/dist/js/uikit.min.js',
+			array( ),
+			'1.2.1',
+			true
+		);
 
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'farbtastic' );
@@ -329,6 +344,8 @@ class SettingsAPI {
 		wp_enqueue_script( 'jquery-ui-core' );
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 		wp_enqueue_script( 'jquery-ui-timepicker' );
+		wp_enqueue_script( 'ui-kit' );
+		wp_enqueue_script( 'ui-kit-icons' );
 		wp_enqueue_script( 'sbsa' );
 
 		$data = array(
@@ -354,12 +371,12 @@ class SettingsAPI {
 			array(),
 			filemtime( $this->options_path . $sbsa_css_path )
 		);
-		// wp_enqueue_style(
-		// 	'sbsa-1',
-		// 	'https://getuikit.com/css/theme.css?lfds8h76',
-		// 	array(),
-		// 	filemtime( $this->options_path . $sbsa_css_path )
-		// );
+		wp_register_style(
+			'ui-kit',
+			'https://cdn.jsdelivr.net/npm/uikit@3.16.10/dist/css/uikit.min.css',
+			array(),
+			filemtime( $this->options_path . $sbsa_css_path )
+		);
 
 		$jqui_css_path = 'assets/vendor/jquery-ui/jquery-ui.css';
 		wp_register_style(
@@ -373,6 +390,7 @@ class SettingsAPI {
 		wp_enqueue_style( 'thickbox' );
 		wp_enqueue_style( 'jquery-ui-timepicker' );
 		wp_enqueue_style( 'jquery-ui-css' );
+		wp_enqueue_style( 'ui-kit' );
 		wp_enqueue_style( 'sbsa' );
 	}
 
