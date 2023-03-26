@@ -461,7 +461,7 @@ class SettingsAPI {
 			foreach ( $this->settings as $section ) {
 				if ( isset( $section['section_id'] ) && $section['section_id'] && isset( $section['section_title'] ) ) {
 					$page_name = ( $this->has_tabs() ) ? sprintf( '%s_%s', $this->option_group, $section['tab_id'] ) : $this->option_group;
-					echo '<span>dss</span>';
+
 					add_settings_section( $section['section_id'], $section['section_title'], array( $this, 'section_intro' ), $page_name, apply_filters( 'sbsa_settings_sections_args_' . $this->option_group, array(), $section ) );
 
 					if ( isset( $section['fields'] ) && is_array( $section['fields'] ) && ! empty( $section['fields'] ) ) {
