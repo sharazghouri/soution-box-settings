@@ -21,7 +21,7 @@
 			sbsa.control_groups();
 			sbsa.setup_visual_radio_checkbox_field();
 			sbsa.importer.init();
-
+			sbsa.misc.init();
 			$( document.body ).on( 
 				'change',
 				'input, select, textarea, .sbsa-visual-field input[type="radio"], .sbsa-visual-field input[type="checkbox"]', 
@@ -673,6 +673,123 @@
 				  callback(reader.result);
 				};
 			}
+		},
+		misc: {
+			 init : function(){
+					sbsa.misc.select_icons();
+			 },
+			  select_icons: function(){
+				//Browse Icons
+				$(document).on( 'click', '.sbsa-browse-icon', function( e ) {
+					e.preventDefault();
+		
+					const ModelID = $(this).attr('data-model');
+		
+					$( `#${ModelID}` ).show();
+				} );
+		
+				//Close Modal
+				$( '.sbsa-modal-icon .close' ).on( 'click', function() {
+					$( '.sbsa-modal-icon' ).hide();
+					$( '.sbsa_search_icon' ).val( '' );
+					$( '.sbsa_icon_ul li' ).show();
+				} );
+		
+				//Close Modal
+				$( window ).on( 'click', function( e ) {
+					if ( e.target.classList.contains('sbsa-modal-icon') ) {
+						$( '.sbsa-modal-icon' ).hide();
+						$( '.sbsa_search_icon' ).val( '' );
+						$( '.sbsa_icon_ul li' ).show();
+					}
+				} );
+		
+		
+		
+				function SbSearchData( input ) {
+					
+					let a, i, txtValue;
+					const filter = $( input ).val().toUpperCase();
+					const li = $( input ).parents( '.sbsa-modal-icon' ).find( '.icon-list-wrap li' );
+					debugger
+					for ( i = 0; i < li.length; i++ ) {
+						a = li[ i ].getElementsByTagName( 'i' )[ 0 ];
+		
+						if ( a === null ) {
+							a = li[ i ].getElementsByTagName( 'label' )[ 0 ];
+							txtValue = a.innerHTML;
+						} else {
+							txtValue = a.getAttribute( 'data-icon' );
+						}
+		
+						if ( txtValue.toUpperCase().indexOf( filter ) > -1 ) {
+							li[ i ].style.display = '';
+						} else {
+							li[ i ].style.display = 'none';
+						}
+					}
+				}
+		
+				function sbsa_debounce(fn, delay) {
+					var timer = null;
+					return function () {
+						var context = this,
+							args = arguments;
+						clearTimeout(timer);
+						timer = setTimeout(function () {
+							fn.apply(context, args);
+						}, delay);
+					};
+				}
+				// Search icons
+				$( '.sbsa_search_icon' ).on( 'keyup', function(e) {
+					sbsa_debounce( SbSearchData( this ), 500);
+				} );
+				function SbSearchData( input ) {
+					
+					let a, i, txtValue;
+					const filter = $( input ).val().toUpperCase();
+					const li = $( input ).parents( '.sbsa-modal-icon' ).find( '.icon-list-wrap li' );
+					
+					for ( i = 0; i < li.length; i++ ) {
+						a = li[ i ].getElementsByTagName( 'i' )[ 0 ];
+		
+						if ( a === null ) {
+							a = li[ i ].getElementsByTagName( 'label' )[ 0 ];
+							txtValue = a.innerHTML;
+						} else {
+							txtValue = a.getAttribute( 'data-icon' );
+						}
+		
+						if ( txtValue.toUpperCase().indexOf( filter ) > -1 ) {
+							li[ i ].style.display = '';
+						} else {
+							li[ i ].style.display = 'none';
+						}
+					}
+				}
+		
+				// Add Icon
+				$( '.sbsa-modal-icon' ).on( 'click', '.select-icon', function( e ) {
+					e.preventDefault();
+					const icon = $( this ).find( 'i' );
+					const iconName = icon.attr( 'class' );
+					//Repeater tab add icon
+					$( this ).parents( '.sbsa-modal-icon' ).siblings( '.sbsa-icon-input' ).val( iconName );
+					$( this ).parents( '.sbsa-modal-icon' ).siblings('.sbsa-icon-output').html( '<i class="' + iconName + '"></i><a href="#" class="sbsa-icon-remove">Remove</a>' );
+					$( this ).parents( '.sbsa-modal-icon' ).hide();
+					$( '.sbsa_search_icon' ).val( '' );
+		
+				} );
+				// Remove Icon
+				$(document).on( 'click', '.sbsa-icon-remove', function(e){
+					e.preventDefault();
+					$(this).parent().siblings('.sbsa-icon-input' ).val('');
+					$(this).parent().html('');
+				});
+		
+			}
+			
 		}
 	};
 

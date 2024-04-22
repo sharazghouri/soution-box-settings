@@ -2,21 +2,21 @@
 /**
  * Plugin Name: WP Settings Framework Example
  * Description: An example of the WP Settings Framework in action.
- * Version: 1.6.0
- * Author: Gilbert Pellegrom
- * Author URI: http://dev7studios.com
+ * Version: 1.0.0
+ * Author: Sharaz
+ * Author URI: https://github.com/sharazghouri
  *
  * @package sbsa
  */
 
  defined( 'ABSPATH' ) || exit;
 
-require_once __DIR__ . '/src/SettingsAPI.php';
+// require_once __DIR__ . '/src/SettingsAPI.php';
 
 // autoloader.
-if ( ! class_exists( \SolutionBoxSettings\SettingsAPI::class ) ) {
+// if ( ! class_exists( \SolutionBoxSettings\SettingsAPI::class ) ) {
 	require __DIR__ . '/vendor/autoload.php';
-}
+// }
 
 
 
@@ -39,7 +39,7 @@ class SBSATest {
 	private $sbsa;
 
 	/**
-	 * sbsaTest constructor.
+	 * Solution Box Settings Test constructor.
 	 */
 	public function __construct() {
 		$this->plugin_path = plugin_dir_path( __FILE__ );
@@ -51,7 +51,7 @@ class SBSATest {
 
 		// Add an optional settings validation filter (recommended).
 		add_filter( $this->sbsa->get_option_group() . '_settings_validate', array( &$this, 'validate_settings' ) );
-		add_filter( $this->sbsa->get_option_group() . '_settings_validate', array( &$this, 'validate_settings' ) );
+		
 	}
 
 	/**

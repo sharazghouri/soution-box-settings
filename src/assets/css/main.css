@@ -18,6 +18,71 @@
 	margin: 0 0 0 -20px;
 }
 
+/*Icon :-moz-user-disabled*/
+.sbsa-modal-icon {
+	display: none;
+  position: fixed;
+  z-index: 99999;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.sbsa-modal-icon .modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 60%;
+}
+.sbsa-modal-icon .modal-content .close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.sbsa-modal-icon .modal-content .sbsa-font-wrap .icon-search {
+  width: 100%;
+}
+.sbsa-modal-icon .sbsa-font-wrap ul {
+  max-height: 300px;
+  overflow: auto;
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+.sbsa-modal-icon .sbsa-font-wrap ul li {
+  display: inline-block;
+  margin: 1px;
+  padding: 10px;
+  color: #3d3d3d;
+  font-size: 17px;
+  cursor: pointer;
+  text-align: center;
+  width: 20px;
+  height: 20px;
+}
+.sbsa-modal-icon .sbsa-font-wrap ul li:hover {
+  background-color: #d0d0d0;
+  border-radius: 3px;
+}
+
+.sbsa-icon-output {
+	display: inline-block;
+	vertical-align: middle;
+	padding: 5px;
+}
+.sbsa-icon-output i{
+	margin-right: 10px;
+	font-size: 22px;
+	vertical-align: middle;
+}
+.sbsa-icon-output a {
+	color: #d63638;
+}
+
 @media screen and (max-width: 782px) {
 	.sbsa-settings {
 		margin-left: -10px;

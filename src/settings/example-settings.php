@@ -64,6 +64,12 @@ function sbsa_tabless_settings( $sbsa_settings ) {
 				'datepicker' => array(), // Array of datepicker options (http://api.jqueryui.com/datepicker/).
 			),
 			array(
+				'id'         => 'icon',
+				'title'      => 'Icon Picker',
+				'desc'       => 'This is a description.',
+				'type'       => 'icon',
+			),
+			array(
 				'id'      => 'image_radio',
 				'title'   => 'Select a radio',
 				'desc'    => 'This is a description.',

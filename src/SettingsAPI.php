@@ -401,6 +401,15 @@ class SettingsAPI {
 			filemtime( $this->options_path . $jqui_css_path )
 		);
 
+
+
+		wp_register_style(
+			'sbsa-fontawesome',
+			$this->options_url . 'assets/vendor/fontawesome/css/all.min.css',
+			array(),
+			'6.5.2'
+		);
+
 		wp_enqueue_style( 'farbtastic' );
 		wp_enqueue_style( 'thickbox' );
 		wp_enqueue_style( 'jquery-ui-timepicker' );
@@ -1114,7 +1123,6 @@ class SettingsAPI {
 						},
 						multiple: false	// Set to true to allow multiple files to be selected
 					});
-
 					// When an image is selected, run a callback.
 					file_frame.on( 'select', function() {
 						// We set multiple to false so only get one image from the uploader
@@ -1137,6 +1145,64 @@ class SettingsAPI {
 				jQuery( 'a.add_media' ).on( 'click', function() {
 					wp.media.model.settings.post.id = wp_media_post_id;
 				});
+			});
+			</script>
+		<?php
+	}
+
+
+	/**
+	 * Generate: Icons field.
+	 *
+	 * @param array $args Field arguments.
+	 */
+	public function generate_icon_field( $args ) {
+		$args['value'] = esc_attr( $args['value'] );
+		$button_id     = sprintf( '%s_button', $args['id'] );
+		if( file_exists( $this->options_path . 'includes/icons.php' ) ) {
+			include $this->options_path . 'includes/icons.php';
+			wp_enqueue_style( 'sbsa-fontawesome' );
+		} else {
+			echo __( 'Fonts setting file not exist' );
+			return;
+		}
+
+		echo sprintf( '<input type="text" name="%s" id="%s " value="%s" class="regular-text hidden sbsa-icon-input %s"> ', esc_attr( $args['name'] ), esc_attr( $args['id'] ), esc_html( $args['value'] ), esc_attr( $args['class'] ) );
+
+		echo sprintf( '<input type="button" class="button sbsa-browse-icon" id="%s" value="%s"  data-model="%s"/>', esc_attr( $button_id ), esc_html__( 'Add Icon', 'sbsa' ),  "sbsa-modal-icon-" . esc_attr( $args['id'] ) );
+		$icon_output = '';
+		if( $args['value'] ) {
+			$icon_output = sprintf('<i class="%s"></i><a href="#" class="sbsa-icon-remove">Remove</a>', esc_attr(  $args['value'] ), __( 'Remove', 'sbsa' ) );
+		}
+
+		echo sprintf('<div class="sbsa-icon-output">%s</div>', $icon_output );
+
+		?>
+	
+	<script type='text/javascript'>
+			jQuery( document ).ready( function( $ ) {
+				// $(document).on( 'click', '.sbsa-browse-icon', function( e ) {
+				// 	e.preventDefault();
+
+				// 	const ModelID = $(this).attr('data-model');
+
+				// 	$( `#${ModelID}` ).show();
+				// } );
+
+
+				// $( '.sbsa-modal-icon .close' ).on( 'click', function() {
+				// 	$( '.sbsa-modal-icon' ).hide();
+				// 	$( '.sbsa_search_icon' ).val( '' );
+				// 	$( '.sbsa_icon_ul li' ).show();
+				// } );
+
+				// $( window ).on( 'click', function( e ) {
+				// 	if ( e.target.classList.contains('sbsa-modal-icon') ) {
+				// 		$( '.sbsa-modal-icon' ).hide();
+				// 		$( '.sbsa_search_icon' ).val( '' );
+				// 		$( '.sbsa_icon_ul li' ).show();
+				// 	}
+				// } );
 			});
 			</script>
 		<?php
