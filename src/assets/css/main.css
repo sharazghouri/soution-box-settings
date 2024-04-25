@@ -597,7 +597,15 @@ p.submit {
 .sbsa-label__link {
 	line-height: 21px;
 }
-
+.sbsa-label__link.pro{
+	text-decoration: none;
+	background: #6344a2;
+	padding: 3px 6px;
+	border-radius: 7px;
+	color: #fff;
+	font-size: 11px;
+	line-height: 1;
+}
 /* $. Subtitle */
 
 .sbsa-subtitle {

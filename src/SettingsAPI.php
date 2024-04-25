@@ -484,17 +484,18 @@ class SettingsAPI {
 									$link_external = ( isset( $field['link']['external'] ) ) ? (bool) $field['link']['external'] : true;
 									$link_type     = ( isset( $field['link']['type'] ) ) ? esc_attr( $field['link']['type'] ) : 'tooltip';
 									$link_target   = ( $link_external ) ? ' target="_blank"' : '';
-
+									$link_classes = $link_type == 'pro-link' ? 'pro': '';
 									if ( 'tooltip' === $link_type ) {
 										$link_text = sprintf( '<i class="dashicons dashicons-info sbsa-link-icon" title="%s"><span class="screen-reader-text">%s</span></i>', $link_text, $link_text );
 									}
 
-									$link = ( $link_url ) ? sprintf( '<a class="sbsa-label__link" href="%s"%s>%s</a>', $link_url, $link_target, $link_text ) : '';
+									$link = ( $link_url ) ? sprintf( '<a class="sbsa-label__link %s" href="%s"%s>%s</a>', $link_classes ,$link_url, $link_target, $link_text ) : '';
 
-									if ( $link && 'tooltip' === $link_type ) {
+									if ( 'tooltip' === $link_type || 'pro-link' === $link_type ) {
 										$tooltip = $link;
-									} elseif ( $link ) {
-										$field['subtitle'] .= ( empty( $field['subtitle'] ) ) ? $link : sprintf( '<br/><br/>%s', $link );
+									} else {
+										// Simple link 
+										$field['subtitle'] .= ( empty( $field['subtitle'] ) ) ? $link : sprintf( '<br/>%s', $link );
 									}
 								}
 
@@ -1501,12 +1502,14 @@ class SettingsAPI {
 		 * @since 1.6.9
 		 */
 		do_action( 'sbsa_before_tab_links_' . $this->option_group );
+		 
 		?>
 		<ul class="sbsa-nav">
 			<?php
 			$i = 0;
 			foreach ( $this->tabs as $tab_data ) {
-				if ( ! $this->tab_has_settings( $tab_data['id'] ) ) {
+				
+				if ( ! $this->tab_has_link( $tab_data) && ! $this->tab_has_settings( $tab_data['id'] ) ) {
 					continue;
 				}
 
@@ -1515,11 +1518,13 @@ class SettingsAPI {
 				}
 
 				$tab_data['class'] .= self::add_show_hide_classes( $tab_data );
+				$tab_link =  isset( $tab_data['link'] ) ?  $tab_data['link']  : '#tab-'. esc_attr( $tab_data['id'] );
 
+				$external_link_tab =  isset( $tab_data['external'] ) && $tab_data['external'] ? ' target="_blank"' : '';
 				$active = ( 0 === $i ) ? 'sbsa-nav__item--active' : '';
 				?>
 				<li class="sbsa-nav__item <?php echo esc_attr( $active ); ?>">
-					<a class="sbsa-nav__item-link <?php echo esc_attr( $tab_data['class'] ); ?>" href="#tab-<?php echo esc_attr( $tab_data['id'] ); ?>"><?php echo wp_kses_post( $tab_data['title'] ); ?></a>
+					<a class="sbsa-nav__item-link <?php echo esc_attr( $tab_data['class'] ); ?>" <?php echo $external_link_tab ?> href="<?php echo $tab_link; ?>"><?php echo wp_kses_post( $tab_data['title'] ); ?></a>
 				</li>
 				<?php
 				$i ++;
@@ -1532,6 +1537,7 @@ class SettingsAPI {
 
 		<?php // Add this here so notices are moved. ?>
 		<div class="wrap sbsa-notices"><h2>&nbsp;</h2></div>
+		
 		<?php
 		/**
 		 * Hook: execute callback after the tab links for a given option group.
@@ -1539,6 +1545,7 @@ class SettingsAPI {
 		 * @hook sbsa_after_tab_links_<option_group>
 		 * @since 1.6.9
 		 */
+
 		do_action( 'sbsa_after_tab_links_' . $this->option_group );
 	}
 
@@ -1564,6 +1571,26 @@ class SettingsAPI {
 
 		return false;
 	}
+
+	/**
+	 * Does this tab have URL?
+	 *
+	 * @param string $tab_id Tab ID.
+	 *
+	 * @return bool
+	 */
+	public function tab_has_link( $tab_data ) {
+		if ( empty( $this->settings ) ) {
+			return false;
+		}
+
+		if( isset( $tab_data['link'] ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
 
 	/**
 	 * Check if this settings instance has tabs

@@ -19,7 +19,7 @@
  * and check out the tabbed settings function on line 156.
  */
 
-add_filter( 'sbsa_register_settings_my_example_settings', 'sbsa_tabless_settings' );
+add_filter( 'sbsa_register_settings_my_example_settings', 'sbsa_tabbed_settings' );
 
 /**
  * Tabless example.
@@ -248,7 +248,7 @@ function sbsa_tabless_settings( $sbsa_settings ) {
 				'default'  => 'This is default',
 				'link'     => array(
 					'url'      => esc_url( 'https://google.com' ),
-					'type'     => 'tooltip', // Can be 'tooltip' or 'link'. Default is 'tooltip'.
+					'type'     => 'tooltip', // Can be 'tooltip', 'pro-link' or 'link'. Default is 'tooltip'.
 					'text'     => 'Learn More', // Default is 'Learn More'.
 					'external' => true, // Default is `true`.
 				),
@@ -262,7 +262,7 @@ function sbsa_tabless_settings( $sbsa_settings ) {
 				'default'  => 'This is default',
 				'link'     => array(
 					'url'      => esc_url( 'https://google.com' ),
-					'type'     => 'link', // Can be 'tooltip' or 'link'. Default is 'tooltip'.
+					'type'     => 'link', // Can be 'tooltip', 'pro-link' or 'link'. Default is 'tooltip'.
 					'text'     => 'Learn More', // Default is 'Learn More'.
 					'external' => true, // Default is `true`.
 				),
@@ -273,6 +273,21 @@ function sbsa_tabless_settings( $sbsa_settings ) {
 				'desc'    => 'This is a description.',
 				'type'    => 'text',
 				'default' => 'This is default',
+			),
+			array(
+				'id'      => 'pro-text',
+				'title'   => 'Pro Text',
+				'desc'    => 'This is a description.',
+				'type'    => 'text',
+				'default' => 'This is pro setting default',
+
+				'desc'    => 'This premium setting only show for advertisement',
+				'link'     => array(
+					'url'      => esc_url( 'https://google.com' ),
+					'type'     => 'pro-link', // Can be 'tooltip', 'pro-link'or 'link'. Default is 'tooltip'.
+					'text'     => 'Pro', // Default is 'Learn More'.
+					'external' => true, // Default is `true`.
+				),
 			),
 			array(
 				'id'       => 'control-group',
@@ -410,6 +425,12 @@ function sbsa_tabbed_settings( $sbsa_settings ) {
 					'value' => array( '1' ),
 				),
 			),
+		),
+		array(
+			'id'    => 'tab_4',
+			'title' => esc_html__( 'Tab 4', 'text-domain' ),
+			'link'  => 'https://www.solbox.dev/',
+			'external' => true
 		),
 	);
 

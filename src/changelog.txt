@@ -1,0 +1,18 @@
+## [1.1.1] - 2024-04-25
+
+### Added
+
+- v1.1 Pro setting advertisement
+- v1.1 [Tabs settings] tab could be a external link
+
+
+### Changed
+
+src/SettingsAPI.php
+src/assets/css/main.css
+src/settings/example-settings.php
+
+### Removed
+
+
+
