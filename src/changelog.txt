@@ -1,3 +1,19 @@
+## [1.2.0] - 2024-05-21
+
+### Added
+
+- Sortable list New setting Added
+_ Jquery UI CSS Added
+
+### Changed
+
+src/SettingsAPI.php
+src/assets/css/main.css
+src/assets/js/main.js
+src/settings/example-settings.php
+
+### Removed
+
 ## [1.1.1] - 2024-04-25
 
 ### Added
