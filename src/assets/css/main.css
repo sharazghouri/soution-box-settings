@@ -83,11 +83,26 @@
 	color: #d63638;
 }
 
+
 @media screen and (max-width: 782px) {
 	.sbsa-settings {
 		margin-left: -10px;
 	}
 }
+
+.sbsa-sortable-list li {
+	padding: 6px 2px;
+	font-size: 18px;
+	cursor: move;
+}
+
+
+.sbsa-sortable-list li span {
+	padding: 0 3px;
+	font-size: 16px;
+	vertical-align: middle;
+}
+
 
 .sbsa-settings__header {
 	background: #fff;

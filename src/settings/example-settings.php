@@ -19,7 +19,7 @@
  * and check out the tabbed settings function on line 156.
  */
 
-add_filter( 'sbsa_register_settings_my_example_settings', 'sbsa_tabbed_settings' );
+add_filter( 'sbsa_register_settings_my_example_settings', 'sbsa_tabless_settings' );
 
 /**
  * Tabless example.
@@ -198,6 +198,20 @@ function sbsa_tabless_settings( $sbsa_settings ) {
 				'desc'    => 'This is a description.',
 				'type'    => 'file',
 				'default' => '',
+			),
+			array(
+				'id'      => 'list_count',
+				'title'   => 'Sortable List',
+				'desc'    => 'This is a description.',
+				'type'    => 'sortable_list',
+				'default' => '',
+				'choices' => array( 
+					'1' => 'One',
+					'2' => 'Two',
+					'3' => 'Three',
+					'4' => 'Four',
+					'5' => 'Five'
+				)
 			),
 			array(
 				'id'              => 'editor',

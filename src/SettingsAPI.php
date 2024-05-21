@@ -361,6 +361,7 @@ class SettingsAPI {
 		wp_enqueue_script( 'jquery-ui-core' );
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 		wp_enqueue_script( 'jquery-ui-timepicker' );
+		wp_enqueue_script( 'jquery-ui-sortable' );
 		wp_enqueue_script( 'sbsa' );
 
 		$data = array(
@@ -997,6 +998,43 @@ class SettingsAPI {
 	}
 
 	/**
+	 * Generate: Sortable list
+	 * @param array $args Field arguments.
+	 */
+	public function generate_sortable_list_field( $args ) {
+
+		$args['value'] = esc_html( esc_attr( $args['value'] ) );
+		$sortable_choices = $args['choices'];
+
+
+		if( ! empty( $args['value'] ) ) {
+			$sbsa_list_order = explode(",", $args['value'] );
+			$new_order = array();
+			foreach ($sbsa_list_order as $key) {
+					 if (array_key_exists($key, $sortable_choices)) {
+							 $new_order[$key] = $sortable_choices[$key];
+					 }
+			}
+			$sortable_choices = $new_order;
+
+		}
+		?>
+			<ul class="sbsa-sortable-list" id="<?php echo esc_attr( $args['id'] );?>" >
+		<?php
+		foreach ( $sortable_choices as $value => $text ) {
+			// $field_id = sprintf( '%s_list-%s', 'sbsa', $value );
+			$field_id = sprintf( '%s', $value );
+		?>
+				<li class="ui-state-default" id="<?php echo $field_id ;?>"><span class="dashicons dashicons-move
+"></span><?php esc_html_e( $text, 'sbsa')?></li>
+		<?php
+			}
+		echo	'</ul>';
+		echo sprintf( '<input type="text" name="%s" id="%s" value="%s" class="%s hidden sbsa-sortable-list-field"> ', esc_attr( $args['name'] ), esc_attr( $args['id'] ), esc_html( $args['value'] ), esc_attr( $args['class'] ) );
+		$this->generate_description( $args['desc'] );
+	}
+
+	/**
 	 * Generate: Checkbox field
 	 *
 	 * @param array $args Field arguments.
@@ -1179,33 +1217,6 @@ class SettingsAPI {
 		echo sprintf('<div class="sbsa-icon-output">%s</div>', $icon_output );
 
 		?>
-	
-	<script type='text/javascript'>
-			jQuery( document ).ready( function( $ ) {
-				// $(document).on( 'click', '.sbsa-browse-icon', function( e ) {
-				// 	e.preventDefault();
-
-				// 	const ModelID = $(this).attr('data-model');
-
-				// 	$( `#${ModelID}` ).show();
-				// } );
-
-
-				// $( '.sbsa-modal-icon .close' ).on( 'click', function() {
-				// 	$( '.sbsa-modal-icon' ).hide();
-				// 	$( '.sbsa_search_icon' ).val( '' );
-				// 	$( '.sbsa_icon_ul li' ).show();
-				// } );
-
-				// $( window ).on( 'click', function( e ) {
-				// 	if ( e.target.classList.contains('sbsa-modal-icon') ) {
-				// 		$( '.sbsa-modal-icon' ).hide();
-				// 		$( '.sbsa_search_icon' ).val( '' );
-				// 		$( '.sbsa_icon_ul li' ).show();
-				// 	}
-				// } );
-			});
-			</script>
 		<?php
 	}
 
