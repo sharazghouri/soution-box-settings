@@ -36,7 +36,7 @@
 
 			sbsa.setup_timepickers();
 			sbsa.setup_datepickers();
-
+			sbsa.setup_sortable();
 		},
 
 		/**
@@ -220,6 +220,24 @@
 			});
 		},
 
+		/**
+		 * Set up sortable
+		 */
+		setup_sortable: function() {
+			$( '.sbsa-sortable-list' ).sortable({
+				cursor: "move",
+				update: function( event, ui ) {
+
+					const SortItem = $(ui.item).parent();
+					const SortOrder = wp.hooks.applyFilters( 'sbsa_sort_list_update_value',$(SortItem ).sortable('toArray') );
+
+					$(SortItem).parent().find('.sbsa-sortable-list-field').val(SortOrder.join(','));
+					wp.hooks.doAction('sbsa_sort_list_update', SortItem, SortOrder); // use this Js Action hook to send ajax. It's totally upto you.
+					
+				}
+			});
+
+		},
 		/**
 		 * Setup repeatable groups
 		 */
