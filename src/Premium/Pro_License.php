@@ -82,8 +82,8 @@ abstract class Pro_License {
     add_action( 'admin_init', [ $this, 'manage_license' ] );
   }
 
-  abstract function set_upgrade_path() : string;
-  abstract function set_pro_version() : string;
+  abstract function set_upgrade_path();
+  abstract function set_pro_version();
 
   /**
    * Admin hooks.
@@ -92,26 +92,26 @@ abstract class Pro_License {
    * @return void
    */
   public function admin_hooks() {
-    add_action( 'wp_ajax_wbpop_pro_license', $this, 'manage_license' );
+    add_action( 'wp_ajax_' . $this->slug . '_license', $this, 'manage_license' );
   }
 
   public function manage_license() {
 
-    if ( isset( $_POST['wbpop-pro-license-activate'] ) ) {
-      $registration_data = self::activate_license( sanitize_text_field( wp_unslash( $_POST['wbpop_pro_license_key'] ) ) );
+    if ( isset( $_POST[$this->slug . '-license-activate'] ) ) {
+      $registration_data = self::activate_license( sanitize_text_field( wp_unslash( $_POST[ $this->slug . '_license_key'] ) ) );
 
       if ( $registration_data['license_data']['success'] ) {
 
-        update_option( 'wbpop_pro_license_key', trim( $_POST['wbpop_pro_license_key'] ) );
+        update_option( $this->slug . '_license_key', trim( $_POST[ $this->slug . '_license_key'] ) );
         wp_send_json_success( [ 'data' => $registration_data['license_data'] ] );
       } else {
         wp_send_json_error( [ 'error' => $registration_data['error_message'] ] );
       }
     }
 
-    if ( isset( $_POST['wbpop-pro-license-deactivate'] ) ) {
+    if ( isset( $_POST[$this->slug . '-license-deactivate'] ) ) {
 
-      $license           = get_option( 'wbpop_pro_license_key' );
+      $license           = get_option( $this->slug . '_license_key' );
       $registration_data = self::deactivate_license( sanitize_text_field( wp_unslash( $license ) ) );
       wp_die();
     }
@@ -488,7 +488,7 @@ abstract class Pro_License {
    * @return void
    */
   public static function get_license() {
-    return get_option( 'wbpop_pro_license_key' );
+    return get_option( $this->slug . '_license_key' );
   }
 
   /**
@@ -535,7 +535,7 @@ abstract class Pro_License {
           esc_html__( 'Your license key has been deactivated on %s. Please Activate your license key to continue using Automatic Updates and Premium Support.', 'woo-bpo-pro' ),
           '<strong>' . date_i18n( get_option( 'date_format' ), strtotime( current_time( 'timestamp' ) ) ) . '</strong>'
         );
-          delete_option( 'wbpop_pro_license_key' );
+          delete_option( $this->slug .'_license_key' );
         return $message;
         break;
 
@@ -579,14 +579,14 @@ abstract class Pro_License {
       return false;
     }
 
-    $prevent_check = get_transient( 'wbpop-pro-dont-check-license' );
+    $prevent_check = get_transient( $this->slug . '-dont-check-license' );
 
     if ( $prevent_check ) {
       return true;
     }
 
     $new_license_data = self::check_license( self::get_registered_license_key() );
-    set_transient( 'wbpop-pro-dont-check-license', true, DAY_IN_SECONDS );
+    set_transient( $this->slug . '-dont-check-license', true, DAY_IN_SECONDS );
 
     if ( empty( $new_license_data ) ) {
       return true;
@@ -638,7 +638,7 @@ abstract class Pro_License {
    * @return void
    */
   public static function del_license_data() {
-    delete_option( 'wbpop_pro_license_key' );
+    delete_option( $this->slug . '_license_key' );
     delete_option( $this->registration_data_option_key );
   }
 
@@ -679,10 +679,10 @@ abstract class Pro_License {
    * @return bool either valid or not.
    */
   public static function valid_license(){
-    $prevent_check = get_transient( 'wbpop-pro-dont-check-license' );
+    $prevent_check = get_transient( $this->slug . '-dont-check-license' );
     if ( ! $prevent_check && ! empty( self::get_registered_license_key() ) ) {
       self::activate_license( self::get_registered_license_key() );
-      set_transient( 'wbpop-pro-dont-check-license', true, DAY_IN_SECONDS );
+      set_transient( $this->slug . '-dont-check-license', true, DAY_IN_SECONDS );
     }
 
     return self::is_registered();
