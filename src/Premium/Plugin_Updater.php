@@ -130,7 +130,8 @@ final class Plugin_Updater {
 			}
 
 			$version_info = $this->get_cached_version_info();
-
+			
+			
 			if ( false === $version_info ) {
 					$version_info = $this->api_request( 'plugin_latest_version', array( 'slug' => $this->slug, 'beta' => $this->beta ) );
 
@@ -177,11 +178,12 @@ final class Plugin_Updater {
 			if ( $this->name != $file ) {
 					return;
 			}
-
+		
 			// Remove our filter on the site transient
 			remove_filter( 'pre_set_site_transient_update_plugins', array( $this, 'check_update' ), 10 );
 
 			$update_cache = get_site_transient( 'update_plugins' );
+
 
 			$update_cache = is_object( $update_cache ) ? $update_cache : new stdClass();
 

@@ -56,6 +56,7 @@ abstract class Pro_License {
    * @since 1.0.0
    */
   public $version;
+
   
   /**
    * Option key for registration data.
@@ -67,23 +68,35 @@ abstract class Pro_License {
 
   public function __construct( $slug, $product_name, $product_id, $store_url ) {
 
-    if (empty($slug) || empty( $product_name ) || ( $product_id ) ||  empty( $store_url ) ) {
-      throw new InvalidArgumentException('Pro_License arguments couldn`t be empty  ');
+  
+    
+    if (empty($slug) || empty( $product_name ) || empty( $product_id ) ||  empty( $store_url ) ) {
+      throw new \InvalidArgumentException('Pro_License arguments couldn`t be empty  ');
     }
 
 
     $this->product_name = $product_name;
     $this->product_id = $product_id;
     $this->store_url = $store_url;
+    $this->slug      = $slug;
     $this->registration_data_option_key =  $this->slug . '_pro_registration_data';
-
+    $this->upgrade_path = $this->get_upgrade_path();
+    $this->version      = $this->get_pro_version();
 
     add_action( 'admin_init', [ $this, 'init_plugin_updater' ] );
     add_action( 'admin_init', [ $this, 'manage_license' ] );
   }
 
-  abstract function set_upgrade_path();
-  abstract function set_pro_version();
+  /**
+   * Plugin upgrade path
+   *
+   */
+  abstract function get_upgrade_path(): string;
+  /**
+   * Plugin version
+   *
+   */
+  abstract function get_pro_version(): string;
 
   /**
    * Admin hooks.
@@ -98,7 +111,7 @@ abstract class Pro_License {
   public function manage_license() {
 
     if ( isset( $_POST[$this->slug . '-license-activate'] ) ) {
-      $registration_data = self::activate_license( sanitize_text_field( wp_unslash( $_POST[ $this->slug . '_license_key'] ) ) );
+      $registration_data = $this->activate_license( sanitize_text_field( wp_unslash( $_POST[ $this->slug . '_license_key'] ) ) );
 
       if ( $registration_data['license_data']['success'] ) {
 
@@ -112,7 +125,7 @@ abstract class Pro_License {
     if ( isset( $_POST[$this->slug . '-license-deactivate'] ) ) {
 
       $license           = get_option( $this->slug . '_license_key' );
-      $registration_data = self::deactivate_license( sanitize_text_field( wp_unslash( $license ) ) );
+      $registration_data = $this->deactivate_license( sanitize_text_field( wp_unslash( $license ) ) );
       wp_die();
     }
   }
@@ -124,7 +137,7 @@ abstract class Pro_License {
    * @param string $license License key to activate.
    * @return array
    */
-  public static function activate_license( $license ) {
+  public function activate_license( $license ) {
     $license = trim( $license );
 
     $result = [
@@ -153,14 +166,14 @@ abstract class Pro_License {
 
     // Make sure the response is not WP_Error.
     if ( is_wp_error( $response ) ) {
-      $result['error_message'] = $response->get_error_message() . esc_html__( 'If this error keeps displaying, please contact our support at gnkapps.com!', 'woo-bpo-pro' );
+      $result['error_message'] = $response->get_error_message() . esc_html__( 'If this error keeps displaying, please contact our support!', 'woo-bpo-pro' );
 
       return $result;
     }
 
     // Make sure the response is OK (200).
     if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
-      $result['error_message'] = esc_html__( 'An error occurred, please try again.', 'woo-bpo-pro' ) . esc_html__( 'An error occurred, please try again. If this error keeps displaying, please contact our support at gnkapps.com!', 'woo-bpo-pro' );
+      $result['error_message'] = esc_html__( 'An error occurred, please try again.', 'woo-bpo-pro' ) . esc_html__( 'An error occurred, please try again. If this error keeps displaying, please contact our support at ', 'woo-bpo-pro' );
 
       return $result;
     }
@@ -219,7 +232,7 @@ abstract class Pro_License {
    * @param string $license License key to activate.
    * @return array $result response result.
    */
-  public static function deactivate_license( $license ) {
+  public function deactivate_license( $license ) {
     $license = trim( $license );
 
     $result = [
@@ -248,14 +261,14 @@ abstract class Pro_License {
 
     // Make sure the response is not WP_Error.
     if ( is_wp_error( $response ) ) {
-      $result['error_message'] = $response->get_error_message() . esc_html__( 'If this error keeps displaying, please contact our support at gnkapps.com!', 'woo-bpo-pro' );
+      $result['error_message'] = $response->get_error_message() . esc_html__( 'If this error keeps displaying, please contact our support', 'woo-bpo-pro' );
 
       return $result;
     }
 
     // Make sure the response is OK (200).
     if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
-      $result['error_message'] = esc_html__( 'An error occurred, please try again.', 'woo-bpo-pro' ) . esc_html__( 'An error occurred, please try again. If this error keeps displaying, please contact our support at gnkapps.com!', 'woo-bpo-pro' );
+      $result['error_message'] = esc_html__( 'An error occurred, please try again.', 'woo-bpo-pro' ) . esc_html__( 'An error occurred, please try again. If this error keeps displaying, please contact our support!', 'woo-bpo-pro' );
 
       return $result;
     }
@@ -313,7 +326,7 @@ abstract class Pro_License {
    * @param string $license The license key.
    * @return false|array
    */
-  public static function check_license( $license ) {
+  public function check_license( $license ) {
     $license = trim( $license );
 
     $api_params = [
@@ -346,7 +359,7 @@ abstract class Pro_License {
    * @since 1.0.0
    * @return false|array
    */
-  public static function get_registration_data() {
+  public function get_registration_data() {
     return get_option( $this->registration_data_option_key );
   }
 
@@ -356,9 +369,9 @@ abstract class Pro_License {
    * @since 1.0.0
    * @return boolean
    */
-  public static function is_activated() {
+  public function is_activated() {
 
-    $data = self::get_registration_data();
+    $data = $this->get_registration_data();
 
     if ( empty( $data ) ) {
       return false;
@@ -379,9 +392,9 @@ abstract class Pro_License {
    * @since 1.0.0
    * @return string
    */
-  public static function get_license_type() {
+  public function get_license_type() {
 
-    $data = self::get_registration_data();
+    $data = $this->get_registration_data();
 
     if ( empty( $data ) ) {
       return false;
@@ -408,9 +421,9 @@ abstract class Pro_License {
    * @since 1.0.0
    * @return int
    */
-  public static function get_license_id() {
+  public  function get_license_id() {
 
-    $data = self::get_registration_data();
+    $data = $this->get_registration_data();
 
     if ( empty( $data ) ) {
       return false;
@@ -429,8 +442,9 @@ abstract class Pro_License {
    * @since 1.0.0
    * @return bool
    */
-  public static function is_registered() {
-    $data = self::get_registration_data();
+  public  function is_registered() {
+    $data = $this->get_registration_data();
+
 
     if ( empty( $data ) ) {
       return false;
@@ -451,7 +465,7 @@ abstract class Pro_License {
    * @param string $key license key.
    * @return string masked license key.
    */
-  public static function mask_license( $key ) {
+  public function mask_license( $key ) {
 
     $license_parts  = str_split( $key, 4 );
     $i              = count( $license_parts ) - 1;
@@ -477,8 +491,8 @@ abstract class Pro_License {
    * @since 1.0.0
    * @return void
    */
-  public static function get_masked_license() {
-    return self::mask_license( self::get_license() );
+  public function get_masked_license() {
+    return $this->mask_license( $this->get_license() );
   }
 
   /**
@@ -487,7 +501,7 @@ abstract class Pro_License {
    * @since 1.0.0
    * @return void
    */
-  public static function get_license() {
+  public function get_license() {
     return get_option( $this->slug . '_license_key' );
   }
 
@@ -497,8 +511,8 @@ abstract class Pro_License {
    * @since 1.0.0
    * @return bool|string
    */
-  public static function get_registered_license_key() {
-    $data = self::get_registration_data();
+  public function get_registered_license_key() {
+    $data = $this->get_registration_data();
 
     if ( empty( $data ) ) {
       return '';
@@ -518,8 +532,8 @@ abstract class Pro_License {
    * @since 1.0.0
    * @return bool|string
    */
-  public static function get_registered_license_status() {
-    $data = self::get_registration_data();
+  public function get_registered_license_status() {
+    $data = $this->get_registration_data();
 
     if ( empty( $data ) ) {
       return '';
@@ -554,8 +568,8 @@ abstract class Pro_License {
    * @since 1.0.0
    * @return bool
    */
-  public static function has_license_expired() {
-    $data = self::get_registration_data();
+  public function has_license_expired() {
+    $data = $this->get_registration_data();
 
     if ( empty( $data ) ) {
       return true;
@@ -585,7 +599,7 @@ abstract class Pro_License {
       return true;
     }
 
-    $new_license_data = self::check_license( self::get_registered_license_key() );
+    $new_license_data = $this->check_license( $this->get_registered_license_key() );
     set_transient( $this->slug . '-dont-check-license', true, DAY_IN_SECONDS );
 
     if ( empty( $new_license_data ) ) {
@@ -619,8 +633,8 @@ abstract class Pro_License {
    * @since 1.0.0
    * @return string
    */
-  public static function get_expiration_date() {
-    $data = self::get_registration_data();
+  public function get_expiration_date() {
+    $data = $this->get_registration_data();
 
     if ( empty( $data ) ) {
       return '';
@@ -637,7 +651,7 @@ abstract class Pro_License {
    * @since 1.0.0
    * @return void
    */
-  public static function del_license_data() {
+  public function del_license_data() {
     delete_option( $this->slug . '_license_key' );
     delete_option( $this->registration_data_option_key );
   }
@@ -657,6 +671,7 @@ abstract class Pro_License {
 
     // Retrieve our license key from the DB.
     $license_key = $this->get_registered_license_key();
+
 
     // Setup the updater.
     $edd_updater = new Plugin_Updater(
@@ -678,15 +693,20 @@ abstract class Pro_License {
    * @since 1.0.0
    * @return bool either valid or not.
    */
-  public static function valid_license(){
+  public function valid_license(){
+
     $prevent_check = get_transient( $this->slug . '-dont-check-license' );
-    if ( ! $prevent_check && ! empty( self::get_registered_license_key() ) ) {
-      self::activate_license( self::get_registered_license_key() );
+
+    if ( ! $prevent_check && ! empty( $this->get_registered_license_key() ) ) {
+      $this->activate_license( $this->get_registered_license_key() );
       set_transient( $this->slug . '-dont-check-license', true, DAY_IN_SECONDS );
     }
 
-    return self::is_registered();
+    return $this->is_registered();
   }
 
-  
+  public function get_license_page(){
+
+    include 'template/licensing-page.php';
+  }
 }
