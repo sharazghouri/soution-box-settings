@@ -12,7 +12,7 @@
         "woocommerce/woocommerce-sniffs": "^0.1.0"
     },
     "autoload": {
-        "psr-4": {"SolutionBoxSettings\\": "src/"}
+        "psr-4": {"Solution_Box_Settings\\": "src/"}
       },
     "config": {
         "allow-plugins": {

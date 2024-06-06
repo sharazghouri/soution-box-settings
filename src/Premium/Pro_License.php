@@ -1,6 +1,6 @@
 <?php
 
-namespace SolutionBoxSettings\Premium;
+namespace Solution_Box_Settings\Premium;
 
 /**
  *  License log....

@@ -1,5 +1,5 @@
 <?php
-namespace SolutionBoxSettings;
+namespace Solution_Box_Settings;
 
 /**
  * WordPress Settings Framework

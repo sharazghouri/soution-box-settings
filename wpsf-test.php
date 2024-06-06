@@ -14,7 +14,7 @@
 // require_once __DIR__ . '/src/SettingsAPI.php';
 
 // autoloader.
-// if ( ! class_exists( \SolutionBoxSettings\SettingsAPI::class ) ) {
+// if ( ! class_exists( \Solution_Box_Settings\SettingsAPI::class ) ) {
 	require __DIR__ . '/vendor/autoload.php';
 // }
 
@@ -44,7 +44,7 @@ class SBSATest {
 	public function __construct() {
 		$this->plugin_path = plugin_dir_path( __FILE__ );
 
-		$this->sbsa = new SolutionBoxSettings\SettingsAPI( $this->plugin_path . 'src/settings/example-settings.php', 'my_example_settings' );
+		$this->sbsa = new Solution_Box_Settings\SettingsAPI( $this->plugin_path . 'src/settings/example-settings.php', 'my_example_settings' );
 
 		// Add admin menu.
 		add_action( 'admin_menu', array( $this, 'add_settings_page' ), 20 );
