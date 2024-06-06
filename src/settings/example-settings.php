@@ -64,10 +64,10 @@ function sbsa_tabless_settings( $sbsa_settings ) {
 				'datepicker' => array(), // Array of datepicker options (http://api.jqueryui.com/datepicker/).
 			),
 			array(
-				'id'         => 'icon',
-				'title'      => 'Icon Picker',
-				'desc'       => 'This is a description.',
-				'type'       => 'icon',
+				'id'    => 'icon',
+				'title' => 'Icon Picker',
+				'desc'  => 'This is a description.',
+				'type'  => 'icon',
 			),
 			array(
 				'id'      => 'image_radio',
@@ -205,13 +205,13 @@ function sbsa_tabless_settings( $sbsa_settings ) {
 				'desc'    => 'This is a description.',
 				'type'    => 'sortable_list',
 				'default' => '',
-				'choices' => array( 
+				'choices' => array(
 					'1' => 'One',
 					'2' => 'Two',
 					'3' => 'Three',
 					'4' => 'Four',
-					'5' => 'Five'
-				)
+					'5' => 'Five',
+				),
 			),
 			array(
 				'id'              => 'editor',
@@ -296,7 +296,7 @@ function sbsa_tabless_settings( $sbsa_settings ) {
 				'default' => 'This is pro setting default',
 
 				'desc'    => 'This premium setting only show for advertisement',
-				'link'     => array(
+				'link'    => array(
 					'url'      => esc_url( 'https://google.com' ),
 					'type'     => 'pro-link', // Can be 'tooltip', 'pro-link'or 'link'. Default is 'tooltip'.
 					'text'     => 'Pro', // Default is 'Learn More'.
@@ -441,10 +441,10 @@ function sbsa_tabbed_settings( $sbsa_settings ) {
 			),
 		),
 		array(
-			'id'    => 'tab_4',
-			'title' => esc_html__( 'Tab 4', 'text-domain' ),
-			'link'  => 'https://www.solbox.dev/',
-			'external' => true
+			'id'       => 'tab_4',
+			'title'    => esc_html__( 'Tab 4', 'text-domain' ),
+			'link'     => 'https://www.solbox.dev/',
+			'external' => true,
 		),
 	);
 

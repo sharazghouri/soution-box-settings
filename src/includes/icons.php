@@ -1,6 +1,6 @@
 <?php
 
-$icons = [
+$icons = array(
 	'fab fa-500px'                               => '500px',
 	'fab fa-acquisitions-incorporated'           => 'Acquisitions Incorporated',
 	'fas fa-ad'                                  => 'Ad',
@@ -1455,11 +1455,11 @@ $icons = [
 	'fab fa-youtube'                             => 'YouTube',
 	'fab fa-youtube-square'                      => 'YouTube Square',
 	'fab fa-zhihu'                               => 'Zhihu',
-];
+);
 ?>
 
 <!-- The Modal -->
-<div id="sbsa-modal-icon-<?php echo esc_attr( $args['id'] );?>" class="sbsa-modal-icon">
+<div id="sbsa-modal-icon-<?php echo esc_attr( $args['id'] ); ?>" class="sbsa-modal-icon">
 
 	<div class="modal-content">
 		<span class="close">&times;</span>

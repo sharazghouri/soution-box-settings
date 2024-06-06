@@ -1,4 +1,3 @@
-
 <?php
 /**
  * Provide a admin area view for the plugin
@@ -19,11 +18,11 @@
 	<div class="solbox-row input-wrapper">
 		<div class="solbox-lic-wrap">
 			<?php if ( ! $this->is_registered() ) : ?>
-				<a href="#" class="lic-status"><?php _e( 'Unregistered', 'sbsa')?></a>
+				<a href="#" class="lic-status"><?php _e( 'Unregistered', 'sbsa' ); ?></a>
 				<?php else : ?>
-					<a href="#" class="lic-status registered"><?php _e( 'Registered', 'sbsa')?></a>
+					<a href="#" class="lic-status registered"><?php _e( 'Registered', 'sbsa' ); ?></a>
 				<?php endif; ?>
-			<a href="https://solbox.dev/my-account/" target="_blank" class="find-lic"><?php _e( 'Find my key', 'sbsa')?></a>
+			<a href="https://solbox.dev/my-account/" target="_blank" class="find-lic"><?php _e( 'Find my key', 'sbsa' ); ?></a>
 		</div>
 		<div class="solbox-input">
 		<?php
@@ -34,58 +33,58 @@
 		}
 		?>
 			<input id="<?php echo esc_attr( $this->slug ); ?>-license-key" placeholder="<?php esc_html_e( 'Enter license key', 'sbsa' ); ?>" name="<?php echo esc_attr( $this->slug ); ?>_license_key" type="text" class="solbox-license-key" value="<?php echo esc_html( $plugin_license_key ); ?>" /> 
-      
+	  
 			<div class="<?php echo esc_attr( $this->slug ); ?>-lic-submit solbox-submit-wrapper">
 
 				<?php wp_nonce_field( $this->slug . 'license', $this->slug . 'license_nonce' ); ?>
 				<?php if ( ! $this->is_registered() ) : ?>
-					<button type="button" class="button-secondary lic-action-btn" id="<?php echo esc_attr( $this->slug );?>-license-activate">
+					<button type="button" class="button-secondary lic-action-btn" id="<?php echo esc_attr( $this->slug ); ?>-license-activate">
 					<?php _e( 'Register This License Key', 'sbsa' ); ?></button>
 				<?php else : ?>
-					<button type="button" class="button-primary lic-action-btn" id="<?php echo esc_attr( $this->slug );?>-license-deactivate" >
+					<button type="button" class="button-primary lic-action-btn" id="<?php echo esc_attr( $this->slug ); ?>-license-deactivate" >
 					<?php _e( 'Deactivate License', 'sbsa' ); ?></button>
 				<?php endif; ?>
 				<div class="loader-container"><div class="loader"></div></div>
 			</div>
 			<?php
-				if ( $this->is_registered() ) {
-							$expiration_date = $this->get_expiration_date();
+			if ( $this->is_registered() ) {
+						$expiration_date = $this->get_expiration_date();
 
-							if ( 'lifetime' == $expiration_date ) {
-								$license_desc = esc_html__( 'You have a lifetime licenses, it will never expire.', 'sbsa' );
-							}
-							else {
-								$license_desc = sprintf(
-								esc_html__( 'Your (%2$s) license key is valid until %s.', 'sbsa' ),
-									'<strong>' . date_i18n( get_option( 'date_format' ), strtotime( $expiration_date, current_time( 'timestamp' ) ) ) . '</strong>', $this->get_license_type()
-								);
-							}
+				if ( 'lifetime' == $expiration_date ) {
+					$license_desc = esc_html__( 'You have a lifetime licenses, it will never expire.', 'sbsa' );
+				} else {
+					$license_desc = sprintf(
+						esc_html__( 'Your (%2$s) license key is valid until %s.', 'sbsa' ),
+						'<strong>' . date_i18n( get_option( 'date_format' ), strtotime( $expiration_date, current_time( 'timestamp' ) ) ) . '</strong>',
+						$this->get_license_type()
+					);
+				}
 
-							if ( 'lifetime' != $expiration_date ) {
-							$license_tooltip_desc  = sprintf(
-									esc_html__( "The license will automatically renew, if you have an active subscription to the - at %s", 'sbsa' ),
-									'<a href="https://solbox.dev/">SolBox.dev</a>'
-								);
-							} else {
-								$license_tooltip_desc = '';
-							}
+				if ( 'lifetime' != $expiration_date ) {
+					$license_tooltip_desc = sprintf(
+						esc_html__( 'The license will automatically renew, if you have an active subscription to the - at %s', 'sbsa' ),
+						'<a href="https://solbox.dev/">SolBox.dev</a>'
+					);
+				} else {
+					$license_tooltip_desc = '';
+				}
 
-							if ( $this->has_license_expired() ) {
-								$license_desc = sprintf(
-									esc_html__( 'Your license key expired on %s. Please input a valid non-expired license key. If you think, that this license has not yet expired (was renewed already), then please save the settings, so that the license will verify again and get the up-to-date expiration date.', 'sbsa' ),
-									'<strong>' . date_i18n( get_option( 'date_format' ), strtotime( $expiration_date, current_time( 'timestamp' ) ) ) . '</strong>'
-								);
-								$license_tooltip_title = '';
-								$license_tooltip_desc  = '';
+				if ( $this->has_license_expired() ) {
+					$license_desc          = sprintf(
+						esc_html__( 'Your license key expired on %s. Please input a valid non-expired license key. If you think, that this license has not yet expired (was renewed already), then please save the settings, so that the license will verify again and get the up-to-date expiration date.', 'sbsa' ),
+						'<strong>' . date_i18n( get_option( 'date_format' ), strtotime( $expiration_date, current_time( 'timestamp' ) ) ) . '</strong>'
+					);
+					$license_tooltip_title = '';
+					$license_tooltip_desc  = '';
 
-							}
-							//echo 'Need help to get started, <a href="'. $this->get_docs_link() . '" target="_blank">view our Online Documentation</a> or <a href="' . $this->get_store_link() . '" target="_blank">contact our support team</a>';
-							echo $license_desc .'<br /><i>' . $license_tooltip_desc .'</i>';
-						}else{
+				}
+						// echo 'Need help to get started, <a href="'. $this->get_docs_link() . '" target="_blank">view our Online Documentation</a> or <a href="' . $this->get_store_link() . '" target="_blank">contact our support team</a>';
+						echo $license_desc . '<br /><i>' . $license_tooltip_desc . '</i>';
+			} else {
 
-							echo $this->get_registered_license_status();
-						}
-				?>
+				echo $this->get_registered_license_status();
+			}
+			?>
 		</div>
 	</div>
 </div>
@@ -234,7 +233,7 @@
 		}
 
 		$.post({
-			url: "<?php echo admin_url('admin-ajax.php'); ?>",
+			url: "<?php echo admin_url( 'admin-ajax.php' ); ?>",
 			data: formData,
 			beforeSend: () => {
 				$(`.${PLUGIN_SLUG}-lic-submit button`).attr('disabled', 'disabled');

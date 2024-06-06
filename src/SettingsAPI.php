@@ -402,8 +402,6 @@ class SettingsAPI {
 			filemtime( $this->options_path . $jqui_css_path )
 		);
 
-
-
 		wp_register_style(
 			'sbsa-fontawesome',
 			$this->options_url . 'assets/vendor/fontawesome/css/all.min.css',
@@ -471,7 +469,7 @@ class SettingsAPI {
 			foreach ( $this->settings as $section ) {
 				if ( isset( $section['section_id'] ) && $section['section_id'] && isset( $section['section_title'] ) ) {
 					$page_name = ( $this->has_tabs() ) ? sprintf( '%s_%s', $this->option_group, $section['tab_id'] ) : $this->option_group;
-					
+
 					add_settings_section( $section['section_id'], $section['section_title'], array( $this, 'section_intro' ), $page_name, apply_filters( 'sbsa_settings_sections_args_' . $this->option_group, array(), $section ) );
 
 					if ( isset( $section['fields'] ) && is_array( $section['fields'] ) && ! empty( $section['fields'] ) ) {
@@ -485,17 +483,17 @@ class SettingsAPI {
 									$link_external = ( isset( $field['link']['external'] ) ) ? (bool) $field['link']['external'] : true;
 									$link_type     = ( isset( $field['link']['type'] ) ) ? esc_attr( $field['link']['type'] ) : 'tooltip';
 									$link_target   = ( $link_external ) ? ' target="_blank"' : '';
-									$link_classes = $link_type == 'pro-link' ? 'pro': '';
+									$link_classes  = $link_type == 'pro-link' ? 'pro' : '';
 									if ( 'tooltip' === $link_type ) {
 										$link_text = sprintf( '<i class="dashicons dashicons-info sbsa-link-icon" title="%s"><span class="screen-reader-text">%s</span></i>', $link_text, $link_text );
 									}
 
-									$link = ( $link_url ) ? sprintf( '<a class="sbsa-label__link %s" href="%s"%s>%s</a>', $link_classes ,$link_url, $link_target, $link_text ) : '';
+									$link = ( $link_url ) ? sprintf( '<a class="sbsa-label__link %s" href="%s"%s>%s</a>', $link_classes, $link_url, $link_target, $link_text ) : '';
 
 									if ( 'tooltip' === $link_type || 'pro-link' === $link_type ) {
 										$tooltip = $link;
 									} else {
-										// Simple link 
+										// Simple link
 										$field['subtitle'] .= ( empty( $field['subtitle'] ) ) ? $link : sprintf( '<br/>%s', $link );
 									}
 								}
@@ -999,37 +997,37 @@ class SettingsAPI {
 
 	/**
 	 * Generate: Sortable list
+	 *
 	 * @param array $args Field arguments.
 	 */
 	public function generate_sortable_list_field( $args ) {
 
-		$args['value'] = esc_html( esc_attr( $args['value'] ) );
+		$args['value']    = esc_html( esc_attr( $args['value'] ) );
 		$sortable_choices = $args['choices'];
 
-
-		if( ! empty( $args['value'] ) ) {
-			$sbsa_list_order = explode(",", $args['value'] );
-			$new_order = array();
-			foreach ($sbsa_list_order as $key) {
-					 if (array_key_exists($key, $sortable_choices)) {
-							 $new_order[$key] = $sortable_choices[$key];
-					 }
+		if ( ! empty( $args['value'] ) ) {
+			$sbsa_list_order = explode( ',', $args['value'] );
+			$new_order       = array();
+			foreach ( $sbsa_list_order as $key ) {
+				if ( array_key_exists( $key, $sortable_choices ) ) {
+						$new_order[ $key ] = $sortable_choices[ $key ];
+				}
 			}
 			$sortable_choices = $new_order;
 
 		}
 		?>
-			<ul class="sbsa-sortable-list" id="<?php echo esc_attr( $args['id'] );?>" >
+			<ul class="sbsa-sortable-list" id="<?php echo esc_attr( $args['id'] ); ?>" >
 		<?php
 		foreach ( $sortable_choices as $value => $text ) {
 			// $field_id = sprintf( '%s_list-%s', 'sbsa', $value );
 			$field_id = sprintf( '%s', $value );
-		?>
-				<li class="ui-state-default" id="<?php echo $field_id ;?>"><span class="dashicons dashicons-move
-"></span><?php esc_html_e( $text, 'sbsa')?></li>
-		<?php
-			}
-		echo	'</ul>';
+			?>
+				<li class="ui-state-default" id="<?php echo $field_id; ?>"><span class="dashicons dashicons-move
+"></span><?php esc_html_e( $text, 'sbsa' ); ?></li>
+			<?php
+		}
+		echo '</ul>';
 		echo sprintf( '<input type="text" name="%s" id="%s" value="%s" class="%s hidden sbsa-sortable-list-field"> ', esc_attr( $args['name'] ), esc_attr( $args['id'] ), esc_html( $args['value'] ), esc_attr( $args['class'] ) );
 		$this->generate_description( $args['desc'] );
 	}
@@ -1198,7 +1196,7 @@ class SettingsAPI {
 	public function generate_icon_field( $args ) {
 		$args['value'] = esc_attr( $args['value'] );
 		$button_id     = sprintf( '%s_button', $args['id'] );
-		if( file_exists( $this->options_path . 'includes/icons.php' ) ) {
+		if ( file_exists( $this->options_path . 'includes/icons.php' ) ) {
 			include $this->options_path . 'includes/icons.php';
 			wp_enqueue_style( 'sbsa-fontawesome' );
 		} else {
@@ -1208,13 +1206,13 @@ class SettingsAPI {
 
 		echo sprintf( '<input type="text" name="%s" id="%s " value="%s" class="regular-text hidden sbsa-icon-input %s"> ', esc_attr( $args['name'] ), esc_attr( $args['id'] ), esc_html( $args['value'] ), esc_attr( $args['class'] ) );
 
-		echo sprintf( '<input type="button" class="button sbsa-browse-icon" id="%s" value="%s"  data-model="%s"/>', esc_attr( $button_id ), esc_html__( 'Add Icon', 'sbsa' ),  "sbsa-modal-icon-" . esc_attr( $args['id'] ) );
+		echo sprintf( '<input type="button" class="button sbsa-browse-icon" id="%s" value="%s"  data-model="%s"/>', esc_attr( $button_id ), esc_html__( 'Add Icon', 'sbsa' ), 'sbsa-modal-icon-' . esc_attr( $args['id'] ) );
 		$icon_output = '';
-		if( $args['value'] ) {
-			$icon_output = sprintf('<i class="%s"></i><a href="#" class="sbsa-icon-remove">Remove</a>', esc_attr(  $args['value'] ), __( 'Remove', 'sbsa' ) );
+		if ( $args['value'] ) {
+			$icon_output = sprintf( '<i class="%s"></i><a href="#" class="sbsa-icon-remove">Remove</a>', esc_attr( $args['value'] ), __( 'Remove', 'sbsa' ) );
 		}
 
-		echo sprintf('<div class="sbsa-icon-output">%s</div>', $icon_output );
+		echo sprintf( '<div class="sbsa-icon-output">%s</div>', $icon_output );
 
 		?>
 		<?php
@@ -1513,14 +1511,14 @@ class SettingsAPI {
 		 * @since 1.6.9
 		 */
 		do_action( 'sbsa_before_tab_links_' . $this->option_group );
-		 
+
 		?>
 		<ul class="sbsa-nav">
 			<?php
 			$i = 0;
 			foreach ( $this->tabs as $tab_data ) {
-				
-				if ( ! $this->tab_has_link( $tab_data) && ! $this->tab_has_settings( $tab_data['id'] ) ) {
+
+				if ( ! $this->tab_has_link( $tab_data ) && ! $this->tab_has_settings( $tab_data['id'] ) ) {
 					continue;
 				}
 
@@ -1529,13 +1527,13 @@ class SettingsAPI {
 				}
 
 				$tab_data['class'] .= self::add_show_hide_classes( $tab_data );
-				$tab_link =  isset( $tab_data['link'] ) ?  $tab_data['link']  : '#tab-'. esc_attr( $tab_data['id'] );
+				$tab_link           = isset( $tab_data['link'] ) ? $tab_data['link'] : '#tab-' . esc_attr( $tab_data['id'] );
 
-				$external_link_tab =  isset( $tab_data['external'] ) && $tab_data['external'] ? ' target="_blank"' : '';
-				$active = ( 0 === $i ) ? 'sbsa-nav__item--active' : '';
+				$external_link_tab = isset( $tab_data['external'] ) && $tab_data['external'] ? ' target="_blank"' : '';
+				$active            = ( 0 === $i ) ? 'sbsa-nav__item--active' : '';
 				?>
 				<li class="sbsa-nav__item <?php echo esc_attr( $active ); ?>">
-					<a class="sbsa-nav__item-link <?php echo esc_attr( $tab_data['class'] ); ?>" <?php echo $external_link_tab ?> href="<?php echo $tab_link; ?>"><?php echo wp_kses_post( $tab_data['title'] ); ?></a>
+					<a class="sbsa-nav__item-link <?php echo esc_attr( $tab_data['class'] ); ?>" <?php echo $external_link_tab; ?> href="<?php echo $tab_link; ?>"><?php echo wp_kses_post( $tab_data['title'] ); ?></a>
 				</li>
 				<?php
 				$i ++;
@@ -1595,7 +1593,7 @@ class SettingsAPI {
 			return false;
 		}
 
-		if( isset( $tab_data['link'] ) ) {
+		if ( isset( $tab_data['link'] ) ) {
 			return true;
 		}
 

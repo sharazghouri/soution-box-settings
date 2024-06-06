@@ -51,7 +51,7 @@ class SBSATest {
 
 		// Add an optional settings validation filter (recommended).
 		add_filter( $this->sbsa->get_option_group() . '_settings_validate', array( &$this, 'validate_settings' ) );
-		
+
 	}
 
 	/**
